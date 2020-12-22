@@ -103,15 +103,9 @@
 		84993AE42592A0E600EFD094 /* MovieCollector */ = {
 			isa = PBXGroup;
 			children = (
-				84993AE52592A0E600EFD094 /* AppDelegate.swift */,
-				84993AE72592A0E600EFD094 /* SceneDelegate.swift */,
-				84993AE92592A0E600EFD094 /* BrowseViewController.swift */,
-				84993B282592A3A700EFD094 /* ProfileViewController.swift */,
-				84993B232592A39800EFD094 /* SearchViewController.swift */,
-				84993B1B2592A1EF00EFD094 /* TabBarViewController.swift */,
+				84993B2E2592A86000EFD094 /* Lauch Files */,
+				84993B2D2592A85600EFD094 /* ViewControllers */,
 				84993AEE2592A0E700EFD094 /* Assets.xcassets */,
-				84993AF02592A0E700EFD094 /* LaunchScreen.storyboard */,
-				84993AF32592A0E700EFD094 /* Info.plist */,
 			);
 			path = MovieCollector;
 			sourceTree = "<group>";
@@ -132,6 +126,28 @@
 				84993B092592A0E700EFD094 /* Info.plist */,
 			);
 			path = MovieCollectorUITests;
+			sourceTree = "<group>";
+		};
+		84993B2D2592A85600EFD094 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				84993AE92592A0E600EFD094 /* BrowseViewController.swift */,
+				84993B282592A3A700EFD094 /* ProfileViewController.swift */,
+				84993B232592A39800EFD094 /* SearchViewController.swift */,
+				84993B1B2592A1EF00EFD094 /* TabBarViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		84993B2E2592A86000EFD094 /* Lauch Files */ = {
+			isa = PBXGroup;
+			children = (
+				84993AF32592A0E700EFD094 /* Info.plist */,
+				84993AE52592A0E600EFD094 /* AppDelegate.swift */,
+				84993AE72592A0E600EFD094 /* SceneDelegate.swift */,
+				84993AF02592A0E700EFD094 /* LaunchScreen.storyboard */,
+			);
+			path = "Lauch Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
