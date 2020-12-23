@@ -40,8 +40,9 @@ class PosterIconView : UICollectionViewCell {
         titleLabel = UILabel.init()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
-        titleLabel.textColor = .black
+        titleLabel.textColor = .myControlWhiteBlackBackground
         titleLabel.numberOfLines = 2
+        titleLabel.font = UIFont.init(name: "AvenirNext-Regular", size: 12)
         addSubview(titleLabel)
         
         setupLayout()
@@ -71,7 +72,7 @@ class PosterIconView : UICollectionViewCell {
             posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
-            posterImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 3/2)
+            posterImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 3/2)
         ])
         
         NSLayoutConstraint.activate([

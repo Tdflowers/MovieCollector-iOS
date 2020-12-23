@@ -12,7 +12,7 @@ class BrowseViewController: UINavigationController {
     var popularMoviesData:[Movie] = [] {
         didSet {
             //Did get popular movies
-//            updatePopularMoviesView()
+            updatePopularMoviesView()
         }
     }
     
@@ -28,24 +28,54 @@ class BrowseViewController: UINavigationController {
 
         view.axis = .vertical
         view.spacing = 10
+        view.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+
 
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-//    var popularMoviesCollectionView:
+    
+    var popularMoviesCollectionView:PosterIconCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        
+        let view = PosterIconCollectionView.init(frame: .zero, collectionViewLayout: layout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.dataSource = view
+        view.delegate = view
+        view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
+        view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return view
+    }()
+    
+    var popularTitleLabel:UILabel = {
+        let label = UILabel.init()
+        label.text = "Popular Movies"
+        label.font = UIFont(name: "AvenirNext-Bold", size: 20)
+        return label
+    }()
     
     var posterIcons:[PosterIconView] = []
     
     var posterImageTest:PosterIconView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setNavigationBarHidden(true, animated: animated)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemBackground
+//            .background(Color(UIColor.systemBackground))
 
         self.view.addSubview(scrollView)
         scrollView.addSubview(stackView)
+        stackView.addArrangedSubview(popularTitleLabel)
+        stackView.addArrangedSubview(popularMoviesCollectionView)
         layoutConstraints()
         
         APIConnect().getPopularMovies(languge: "en-US", region: "") { (returnData) in
@@ -58,8 +88,8 @@ class BrowseViewController: UINavigationController {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -69,18 +99,19 @@ class BrowseViewController: UINavigationController {
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
+        
+        NSLayoutConstraint.activate([
+            popularMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
+        ])
+        
+        NSLayoutConstraint.activate([
+            popularTitleLabel.heightAnchor.constraint(equalToConstant: 50)
+//            popularTitleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: stackView.leadingAnchor, constant: 10)
+        ])
     }
     
     func updatePopularMoviesView () {
-
-        for i in 0...3 {
-            DispatchQueue.main.async {
-                let posterIcon = PosterIconView.init()
-                posterIcon.translatesAutoresizingMaskIntoConstraints = false
-                self.stackView.addArrangedSubview(posterIcon)
-                posterIcon.updateMovieDetailsWith(movie: self.popularMoviesData[i])
-            }
-        }
+        popularMoviesCollectionView.moviesData = popularMoviesData        
     }
 
 }
