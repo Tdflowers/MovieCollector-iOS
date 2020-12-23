@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */; };
 		846749FA25933F0700C15CDE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846749F925933F0700C15CDE /* Color+.swift */; };
 		848AD1C02593014A0082FED5 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 848AD1BF2593014A0082FED5 /* Nuke */; };
 		848AD1C5259303D20082FED5 /* PosterIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848AD1C4259303D20082FED5 /* PosterIconView.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingMovies.swift; sourceTree = "<group>"; };
 		846749F925933F0700C15CDE /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		848AD1C4259303D20082FED5 /* PosterIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconView.swift; sourceTree = "<group>"; };
 		848AD1CD25932BA00082FED5 /* PosterIconCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconCollectionView.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 			children = (
 				84993B3F2592B09A00EFD094 /* Movie.swift */,
 				84993B442592B09F00EFD094 /* PopularMovieResults.swift */,
+				8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				84993B452592B09F00EFD094 /* PopularMovieResults.swift in Sources */,
 				84993B242592A39800EFD094 /* SearchViewController.swift in Sources */,
 				848AD1CE25932BA00082FED5 /* PosterIconCollectionView.swift in Sources */,
+				8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */,
 				84993B402592B09A00EFD094 /* Movie.swift in Sources */,
 				84993B332592A89F00EFD094 /* Secrets.swift in Sources */,
 				84993B1C2592A1EF00EFD094 /* TabBarViewController.swift in Sources */,

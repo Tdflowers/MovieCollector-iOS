@@ -19,7 +19,7 @@ extension PopularMovieResults: Decodable {
     }
 
     init?(data: Data) {
-        guard let me = try? JSONDecoder().decode(PopularMovieResults.self, from: data) else { return nil }
+        guard let me = try? JSONDecoder.theMovieDB.decode(PopularMovieResults.self, from: data) else { return nil }
         self = me
     }
 }

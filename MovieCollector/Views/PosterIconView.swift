@@ -60,7 +60,13 @@ class PosterIconView : UICollectionViewCell {
                 let urlComponents = URLComponents(string: urlString)
                 if let url = urlComponents!.url {
                     let imageRequest = ImageRequest.init(url: url)
-                    Nuke.loadImage(with: imageRequest, into: self.posterImageView)
+                    
+                    let options = ImageLoadingOptions(
+                        placeholder: UIImage(named: "placeholder poster"),
+                        transition: .fadeIn(duration: 0.3)
+                    )
+                    
+                    Nuke.loadImage(with: imageRequest,options: options, into: self.posterImageView)
                 }
             }
         }
