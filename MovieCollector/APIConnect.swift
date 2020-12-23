@@ -19,9 +19,6 @@ class APIConnect: NSObject {
         var urlComponents = URLComponents(string: urlString)
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
         let request = URLRequest(url: urlComponents!.url!)
-//        request.httpMethod = "GET"
-//        request.setValue("3cb495ce6b77a9608b0188efdf9c9e05", forHTTPHeaderField: "api_key")
-//        print(request.allHTTPHeaderFields)
         
         // Create and run a URLSession data task with our JSON encoded POST request
         let config = URLSessionConfiguration.default

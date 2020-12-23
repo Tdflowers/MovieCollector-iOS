@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		848AD1C02593014A0082FED5 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 848AD1BF2593014A0082FED5 /* Nuke */; };
+		848AD1C5259303D20082FED5 /* PosterIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848AD1C4259303D20082FED5 /* PosterIconView.swift */; };
 		84993AE62592A0E600EFD094 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84993AE52592A0E600EFD094 /* AppDelegate.swift */; };
 		84993AE82592A0E600EFD094 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84993AE72592A0E600EFD094 /* SceneDelegate.swift */; };
 		84993AEA2592A0E600EFD094 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84993AE92592A0E600EFD094 /* BrowseViewController.swift */; };
@@ -42,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		848AD1C4259303D20082FED5 /* PosterIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconView.swift; sourceTree = "<group>"; };
 		84993AE22592A0E600EFD094 /* MovieCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84993AE52592A0E600EFD094 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84993AE72592A0E600EFD094 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				848AD1C02593014A0082FED5 /* Nuke in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +94,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		848AD1C9259303EB0082FED5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				848AD1C4259303D20082FED5 /* PosterIconView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		84993AD92592A0E600EFD094 = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +133,7 @@
 				84993B2D2592A85600EFD094 /* ViewControllers */,
 				84993AEE2592A0E700EFD094 /* Assets.xcassets */,
 				84993AF32592A0E700EFD094 /* Info.plist */,
+				848AD1C9259303EB0082FED5 /* Views */,
 			);
 			path = MovieCollector;
 			sourceTree = "<group>";
@@ -197,6 +210,9 @@
 			dependencies = (
 			);
 			name = MovieCollector;
+			packageProductDependencies = (
+				848AD1BF2593014A0082FED5 /* Nuke */,
+			);
 			productName = MovieCollector;
 			productReference = 84993AE22592A0E600EFD094 /* MovieCollector.app */;
 			productType = "com.apple.product-type.application";
@@ -268,6 +284,9 @@
 				Base,
 			);
 			mainGroup = 84993AD92592A0E600EFD094;
+			packageReferences = (
+				848AD1BE2593014A0082FED5 /* XCRemoteSwiftPackageReference "Nuke" */,
+			);
 			productRefGroup = 84993AE32592A0E600EFD094 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -310,6 +329,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				848AD1C5259303D20082FED5 /* PosterIconView.swift in Sources */,
 				84993B292592A3A700EFD094 /* ProfileViewController.swift in Sources */,
 				84993B452592B09F00EFD094 /* PopularMovieResults.swift in Sources */,
 				84993B242592A39800EFD094 /* SearchViewController.swift in Sources */,
@@ -645,6 +665,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		848AD1BE2593014A0082FED5 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.2.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		848AD1BF2593014A0082FED5 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 848AD1BE2593014A0082FED5 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 84993ADA2592A0E600EFD094 /* Project object */;
 }
