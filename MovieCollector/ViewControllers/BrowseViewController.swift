@@ -11,9 +11,30 @@ class BrowseViewController: UINavigationController {
     
     var popularMoviesData:[Movie] = [] {
         didSet {
-            posterImageTest.updateMovieDetailsWith(movie: self.popularMoviesData[0])
+            //Did get popular movies
+//            updatePopularMoviesView()
         }
     }
+    
+    var scrollView:UIScrollView = {
+        let scrollView = UIScrollView()
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    var stackView:UIStackView = {
+        let view = UIStackView()
+
+        view.axis = .vertical
+        view.spacing = 10
+
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+//    var popularMoviesCollectionView:
+    
+    var posterIcons:[PosterIconView] = []
     
     var posterImageTest:PosterIconView!
 
@@ -22,14 +43,44 @@ class BrowseViewController: UINavigationController {
         // Do any additional setup after loading the view.
         
         self.view.backgroundColor = .white
+
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        layoutConstraints()
         
         APIConnect().getPopularMovies(languge: "en-US", region: "") { (returnData) in
             self.popularMoviesData = returnData.movies
-//            print(self.popularMoviesData[0].posterPath)
         }
+    }
+    
+    func layoutConstraints() {
         
-        posterImageTest = PosterIconView.init(frame: CGRect.init(x: 50, y: 50, width: self.view.frame.width / 4, height: self.view.frame.height / 4))
-        view.addSubview(posterImageTest)
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ])
+    }
+    
+    func updatePopularMoviesView () {
+
+        for i in 0...3 {
+            DispatchQueue.main.async {
+                let posterIcon = PosterIconView.init()
+                posterIcon.translatesAutoresizingMaskIntoConstraints = false
+                self.stackView.addArrangedSubview(posterIcon)
+                posterIcon.updateMovieDetailsWith(movie: self.popularMoviesData[i])
+            }
+        }
     }
 
 }

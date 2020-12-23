@@ -8,7 +8,7 @@
 import UIKit
 import Nuke
 
-class PosterIconView : UIView {
+class PosterIconView : UICollectionViewCell {
     
     var movie:Movie!
     var posterImageView:UIImageView!
@@ -59,7 +59,6 @@ class PosterIconView : UIView {
                 let urlComponents = URLComponents(string: urlString)
                 if let url = urlComponents!.url {
                     let imageRequest = ImageRequest.init(url: url)
-                    print(url)
                     Nuke.loadImage(with: imageRequest, into: self.posterImageView)
                 }
             }

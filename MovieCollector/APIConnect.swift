@@ -34,7 +34,7 @@ class APIConnect: NSObject {
                     let moviesResults = try JSONDecoder().decode(PopularMovieResults.self, from: data)
                     completion(moviesResults)
                 } catch let error {
-                    print(error as? Any)
+                    print(error as Any)
                 }
             } else {
                 print("no readable data received in response")
