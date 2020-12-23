@@ -68,6 +68,8 @@ class PosterIconView : UICollectionViewCell {
                     
                     Nuke.loadImage(with: imageRequest,options: options, into: self.posterImageView)
                 }
+            } else {
+                self.posterImageView.image = UIImage(named: "placeholder poster")
             }
         }
     }

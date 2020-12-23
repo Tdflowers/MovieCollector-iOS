@@ -17,7 +17,7 @@ class APIConnect: NSObject {
         let urlString = APIBASEURL + "/movie/popular"
         
         var urlComponents = URLComponents(string: urlString)
-        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
         let request = URLRequest(url: urlComponents!.url!)
         
         // Create and run a URLSession data task with our JSON encoded POST request
@@ -48,7 +48,7 @@ class APIConnect: NSObject {
         let urlString = APIBASEURL + "/movie/now_playing"
         
         var urlComponents = URLComponents(string: urlString)
-        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
         let request = URLRequest(url: urlComponents!.url!)
         
         // Create and run a URLSession data task with our JSON encoded POST request
@@ -63,6 +63,37 @@ class APIConnect: NSObject {
             if let data = responseData, let _ = String(data: data, encoding: .utf8) {
                 do {
                     let moviesResults = try JSONDecoder().decode(NowPlayingMovies.self, from: data)
+                    completion(moviesResults)
+                } catch let error {
+                    print(error as Any)
+                }
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
+    
+    func getUpcomingMovies(languge: String, region: String, completion: @escaping (UpcomingMovies) -> ()) {
+        
+        let urlString = APIBASEURL + "/movie/upcoming"
+        
+        var urlComponents = URLComponents(string: urlString)
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
+        let request = URLRequest(url: urlComponents!.url!)
+        
+        // Create and run a URLSession data task with our JSON encoded POST request
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                return
+            }
+            
+            // APIs usually respond with the data you just sent in your POST request
+            if let data = responseData, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    let moviesResults = try JSONDecoder().decode(UpcomingMovies.self, from: data)
                     completion(moviesResults)
                 } catch let error {
                     print(error as Any)

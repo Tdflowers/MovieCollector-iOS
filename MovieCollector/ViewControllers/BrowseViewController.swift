@@ -23,6 +23,12 @@ class BrowseViewController: UINavigationController {
         }
     }
     
+    var upcomingMoviesData:[Movie] = [] {
+        didSet {
+            updateUpcomingMoviesView()
+        }
+    }
+    
     var scrollView:UIScrollView = {
         let scrollView = UIScrollView()
 
@@ -70,6 +76,20 @@ class BrowseViewController: UINavigationController {
         return view
     }()
     
+    var upcomingMoviesCollectionView:PosterIconCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        
+        let view = PosterIconCollectionView.init(frame: .zero, collectionViewLayout: layout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.dataSource = view
+        view.delegate = view
+        view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
+        view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return view
+    }()
+    
     var popularTitleLabel:UILabel = {
         let label = UILabel.init()
         label.text = "Popular Movies"
@@ -80,6 +100,13 @@ class BrowseViewController: UINavigationController {
     var nowPlayingTitleLabel:UILabel = {
         let label = UILabel.init()
         label.text = "Now Playing"
+        label.font = UIFont(name: "AvenirNext-Bold", size: 20)
+        return label
+    }()
+    
+    var upcomingTitleLabel:UILabel = {
+        let label = UILabel.init()
+        label.text = "Upcoming"
         label.font = UIFont(name: "AvenirNext-Bold", size: 20)
         return label
     }()
@@ -106,13 +133,18 @@ class BrowseViewController: UINavigationController {
         stackView.addArrangedSubview(popularMoviesCollectionView)
         stackView.addArrangedSubview(nowPlayingTitleLabel)
         stackView.addArrangedSubview(nowPlayingMoviesCollectionView)
+        stackView.addArrangedSubview(upcomingTitleLabel)
+        stackView.addArrangedSubview(upcomingMoviesCollectionView)
         layoutConstraints()
         
-        APIConnect().getPopularMovies(languge: "en-US", region: "") { (returnData) in
+        APIConnect().getPopularMovies(languge: "en-US", region: "US") { (returnData) in
             self.popularMoviesData = returnData.movies
         }
-        APIConnect().getNowPlayingMovies(languge: "en-US", region: "") { (returnData) in
+        APIConnect().getNowPlayingMovies(languge: "en-US", region: "US") { (returnData) in
             self.nowPlayingMoviesData = returnData.movies
+        }
+        APIConnect().getUpcomingMovies(languge: "en-US", region: "US") { (returnData) in
+            self.upcomingMoviesData = returnData.movies
         }
     }
     
@@ -149,14 +181,26 @@ class BrowseViewController: UINavigationController {
             nowPlayingTitleLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
         
+        NSLayoutConstraint.activate([
+            upcomingMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
+        ])
+        
+        NSLayoutConstraint.activate([
+            upcomingTitleLabel.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
     }
     
     func updatePopularMoviesView () {
-        popularMoviesCollectionView.moviesData = popularMoviesData        
+        popularMoviesCollectionView.moviesData = popularMoviesData
     }
     
     func updateNowPlayingMoviesView() {
         nowPlayingMoviesCollectionView.moviesData = nowPlayingMoviesData
+    }
+    
+    func updateUpcomingMoviesView() {
+        upcomingMoviesCollectionView.moviesData = upcomingMoviesData
     }
 
 
