@@ -27,9 +27,9 @@ class TabBarViewController: UITabBarController {
            
            let title = "Browse"
            
-           let defaultImage = UIImage(named: "")
+           let defaultImage = UIImage(systemName: "film")
            
-           let selectedImage = UIImage(named: "")
+           let selectedImage = UIImage(systemName: "film.fill")
 
            let tabBarItem = UITabBarItem(title: title, image: defaultImage, selectedImage: selectedImage)
            
@@ -44,9 +44,9 @@ class TabBarViewController: UITabBarController {
            
            let title = "Search"
            
-           let defaultImage = UIImage(named: "")
+           let defaultImage = UIImage(systemName: "magnifyingglass.circle")
            
-           let selectedImage = UIImage(named: "")
+           let selectedImage = UIImage(systemName: "magnifyingglass.circle.fill")
 
            let tabBarItem = UITabBarItem(title: title, image: defaultImage, selectedImage: selectedImage)
            
@@ -62,9 +62,9 @@ class TabBarViewController: UITabBarController {
         
             let title = "Profile"
            
-           let defaultImage = UIImage(named: "")
+           let defaultImage = UIImage(systemName: "person")
            
-           let selectedImage = UIImage(named: "")
+           let selectedImage = UIImage(systemName: "person.fill")
            
            let tabBarItem = UITabBarItem(title: title, image: defaultImage, selectedImage: selectedImage)
            
