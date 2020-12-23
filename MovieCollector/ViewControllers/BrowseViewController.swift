@@ -28,7 +28,7 @@ class BrowseViewController: UINavigationController {
 //            print(self.popularMoviesData[0].posterPath)
         }
         
-        posterImageTest = PosterIconView.init(frame: CGRect.init(x: 50, y: 50, width: 200, height: 300))
+        posterImageTest = PosterIconView.init(frame: CGRect.init(x: 50, y: 50, width: self.view.frame.width / 4, height: self.view.frame.height / 4))
         view.addSubview(posterImageTest)
     }
 

@@ -23,14 +23,28 @@ class PosterIconView : UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var intrinsicContentSize: CGSize {
+      //preferred content size, calculate it if some internal state changes
+      return CGSize(width: 200, height: 350)
+    }
+    
     private func setupView() {
-        self.backgroundColor = .black
+        self.backgroundColor = .white
         
-        posterImageView = UIImageView.init(frame: CGRect.init(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height))
+        posterImageView = UIImageView.init(frame: CGRect.init())
+        posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        posterImageView.clipsToBounds = true
+        posterImageView.contentMode = .scaleAspectFit
         addSubview(posterImageView)
         
-        titleLabel = UILabel.init(frame: CGRect(x: 0, y: posterImageView.frame.height, width: self.frame.size.width, height: self.frame.size.height - posterImageView.frame.size.height))
+        titleLabel = UILabel.init()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = .black
+        titleLabel.numberOfLines = 2
         addSubview(titleLabel)
+        
+        setupLayout()
        
     }
     
@@ -38,6 +52,7 @@ class PosterIconView : UIView {
         
         DispatchQueue.main.async {
             self.titleLabel.text = movie.title
+            
             
             if let poster = movie.posterPath {
                 let urlString = APIIMAGEBASEURL + "w500" + poster
@@ -49,5 +64,23 @@ class PosterIconView : UIView {
                 }
             }
         }
+    }
+    
+    private func setupLayout() {
+        
+        NSLayoutConstraint.activate([
+            posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
+            posterImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 3/2)
+        ])
+        
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
     }
 }
