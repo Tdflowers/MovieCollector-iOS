@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		844609C825943B2A00297198 /* FeaturedMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844609C725943B2A00297198 /* FeaturedMovieView.swift */; };
 		8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */; };
 		845005342593DB2000ABEFA7 /* UpcomingMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845005332593DB2000ABEFA7 /* UpcomingMovies.swift */; };
 		846749FA25933F0700C15CDE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846749F925933F0700C15CDE /* Color+.swift */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		844609C725943B2A00297198 /* FeaturedMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeaturedMovieView.swift; path = MovieCollector/Views/FeaturedMovieView.swift; sourceTree = SOURCE_ROOT; };
 		8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingMovies.swift; sourceTree = "<group>"; };
 		845005332593DB2000ABEFA7 /* UpcomingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMovies.swift; sourceTree = "<group>"; };
 		846749F925933F0700C15CDE /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		848AD1C9259303EB0082FED5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				844609C725943B2A00297198 /* FeaturedMovieView.swift */,
 				848AD1CD25932BA00082FED5 /* PosterIconCollectionView.swift */,
 				848AD1C4259303D20082FED5 /* PosterIconView.swift */,
 			);
@@ -357,6 +360,7 @@
 				84993AE82592A0E600EFD094 /* SceneDelegate.swift in Sources */,
 				84993B382592AAF000EFD094 /* APIConnect.swift in Sources */,
 				846749FA25933F0700C15CDE /* Color+.swift in Sources */,
+				844609C825943B2A00297198 /* FeaturedMovieView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

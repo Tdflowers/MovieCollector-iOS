@@ -48,6 +48,13 @@ class BrowseViewController: UINavigationController {
         return view
     }()
     
+    var featuredView:FeaturedMovieView = {
+        let view = FeaturedMovieView.init(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     var popularMoviesCollectionView:PosterIconCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -111,6 +118,13 @@ class BrowseViewController: UINavigationController {
         return label
     }()
     
+    var featuredTitleLabel:UILabel = {
+        let label = UILabel.init()
+        label.text = "Featured"
+        label.font = UIFont(name: "AvenirNext-Bold", size: 20)
+        return label
+    }()
+    
     var posterIcons:[PosterIconView] = []
     
     var posterImageTest:PosterIconView!
@@ -129,6 +143,8 @@ class BrowseViewController: UINavigationController {
 
         self.view.addSubview(scrollView)
         scrollView.addSubview(stackView)
+        stackView.addArrangedSubview(featuredTitleLabel)
+        stackView.addArrangedSubview(featuredView)
         stackView.addArrangedSubview(popularTitleLabel)
         stackView.addArrangedSubview(popularMoviesCollectionView)
         stackView.addArrangedSubview(nowPlayingTitleLabel)
@@ -166,6 +182,10 @@ class BrowseViewController: UINavigationController {
         ])
         
         NSLayoutConstraint.activate([
+            featuredView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, multiplier: 0.30),
+        ])
+        
+        NSLayoutConstraint.activate([
             popularMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
         ])
         
@@ -193,6 +213,7 @@ class BrowseViewController: UINavigationController {
     
     func updatePopularMoviesView () {
         popularMoviesCollectionView.moviesData = popularMoviesData
+        featuredView.movie = popularMoviesData.randomElement()
     }
     
     func updateNowPlayingMoviesView() {

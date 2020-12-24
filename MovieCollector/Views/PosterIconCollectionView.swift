@@ -43,6 +43,7 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PosterIconView
         cell.backgroundColor = .clear
+        cell.shouldShowTitle = true
         cell.updateMovieDetailsWith(movie: moviesData[indexPath.row])
         return cell
     }

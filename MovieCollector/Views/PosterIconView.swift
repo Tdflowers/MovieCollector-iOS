@@ -10,9 +10,14 @@ import Nuke
 
 class PosterIconView : UICollectionViewCell {
     
-    var movie:Movie!
+    var movie:Movie! {
+        didSet {
+            updateMovieDetailsWith(movie: movie)
+        }
+    }
     var posterImageView:UIImageView!
     var titleLabel:UILabel!
+    var shouldShowTitle:Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +35,7 @@ class PosterIconView : UICollectionViewCell {
     
     private func setupView() {
         self.backgroundColor = .white
-        
+            
         posterImageView = UIImageView.init(frame: CGRect.init())
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         posterImageView.clipsToBounds = true
@@ -52,8 +57,9 @@ class PosterIconView : UICollectionViewCell {
     func updateMovieDetailsWith(movie:Movie) {
         
         DispatchQueue.main.async {
-            self.titleLabel.text = movie.title
-            
+            if self.shouldShowTitle {
+                self.titleLabel.text = movie.title
+            }
             
             if let poster = movie.posterPath {
                 let urlString = APIIMAGEBASEURL + "w500" + poster
@@ -71,24 +77,40 @@ class PosterIconView : UICollectionViewCell {
             } else {
                 self.posterImageView.image = UIImage(named: "placeholder poster")
             }
+            self.setupLayout()
         }
     }
     
     private func setupLayout() {
         
-        NSLayoutConstraint.activate([
-            posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
-            posterImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 3/2)
-        ])
+        self.removeConstraints(self.constraints)
         
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
-        
+        if self.shouldShowTitle {
+            NSLayoutConstraint.activate([
+                titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor),
+                titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            ])
+            
+            NSLayoutConstraint.activate([
+                posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
+                posterImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 3/2)
+            ])
+            
+        } else {
+            
+            NSLayoutConstraint.activate([
+                posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
+                posterImageView.heightAnchor.constraint(lessThanOrEqualTo: self.heightAnchor),
+                posterImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            ])
+        }
+        layoutIfNeeded()
+
     }
 }
