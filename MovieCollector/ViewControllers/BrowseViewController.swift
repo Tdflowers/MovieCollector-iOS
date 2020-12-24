@@ -190,7 +190,7 @@ class BrowseViewController: UINavigationController {
         ])
         
         NSLayoutConstraint.activate([
-            popularTitleLabel.heightAnchor.constraint(equalToConstant: 50)
+            popularTitleLabel.heightAnchor.constraint(equalToConstant: 25)
         ])
         
         NSLayoutConstraint.activate([
@@ -198,7 +198,7 @@ class BrowseViewController: UINavigationController {
         ])
         
         NSLayoutConstraint.activate([
-            nowPlayingTitleLabel.heightAnchor.constraint(equalToConstant: 50)
+            nowPlayingTitleLabel.heightAnchor.constraint(equalToConstant: 25)
         ])
         
         NSLayoutConstraint.activate([
@@ -206,7 +206,7 @@ class BrowseViewController: UINavigationController {
         ])
         
         NSLayoutConstraint.activate([
-            upcomingTitleLabel.heightAnchor.constraint(equalToConstant: 50)
+            upcomingTitleLabel.heightAnchor.constraint(equalToConstant: 25)
         ])
         
     }

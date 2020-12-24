@@ -30,7 +30,7 @@ class PosterIconView : UICollectionViewCell {
     
     override var intrinsicContentSize: CGSize {
       //preferred content size, calculate it if some internal state changes
-      return CGSize(width: 200, height: 350)
+      return CGSize(width: 25, height: 25)
     }
     
     private func setupView() {
@@ -85,6 +85,8 @@ class PosterIconView : UICollectionViewCell {
         
         self.removeConstraints(self.constraints)
         
+        invalidateIntrinsicContentSize()
+        
         if self.shouldShowTitle {
             NSLayoutConstraint.activate([
                 titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -94,20 +96,21 @@ class PosterIconView : UICollectionViewCell {
             ])
             
             NSLayoutConstraint.activate([
-                posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                posterImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
+                posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
                 posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
-                posterImageView.heightAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 3/2)
+                posterImageView.heightAnchor.constraint(lessThanOrEqualTo: posterImageView.widthAnchor, multiplier: 3/2),
+                
             ])
             
         } else {
-            
             NSLayoutConstraint.activate([
-                posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-                posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
-                posterImageView.heightAnchor.constraint(lessThanOrEqualTo: self.heightAnchor),
-                posterImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+                posterImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                posterImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+//                posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
+                posterImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 3/2),
+                posterImageView.widthAnchor.constraint(equalTo: self.widthAnchor)
             ])
         }
         layoutIfNeeded()

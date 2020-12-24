@@ -52,12 +52,10 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
         
         var width:CGFloat = 0.0
         
-        if collectionView.frame.size.width * 0.25 <= 100 {
-            width = 100
-        } else {
-            width = collectionView.frame.size.width * 0.25
-        }
-        return CGSize.init(width: width, height: collectionView.frame.size.height - 20)
+        let height = collectionView.frame.size.height - 20
+        
+        width = height * 1/2
+        return CGSize.init(width: width, height: height)
     }
     
     

@@ -32,9 +32,9 @@ class FeaturedMovieView: UIView {
     }
 
     private func setupView() {
-        self.backgroundColor = .white
+        self.backgroundColor = .systemBackground
         
-        posterImage = PosterIconView.init(frame: .zero)
+        posterImage = PosterIconView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         posterImage.shouldShowTitle = false
         posterImage.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(posterImage)
@@ -42,14 +42,14 @@ class FeaturedMovieView: UIView {
         titleLabel = UILabel.init(frame: .zero)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFont.init(name: "AvenirNext-Bold", size: 18)
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 3
         titleLabel.textAlignment = .center
         self.addSubview(titleLabel)
         
         overViewLabel = UILabel.init(frame: .zero)
         overViewLabel.translatesAutoresizingMaskIntoConstraints = false
         overViewLabel.font = UIFont.init(name: "AvenirNext-Light", size: 12)
-        overViewLabel.numberOfLines = 5
+        overViewLabel.numberOfLines = 8
         overViewLabel.textAlignment = .center
         self.addSubview(overViewLabel)
         
@@ -62,14 +62,14 @@ class FeaturedMovieView: UIView {
         let layoutConstraint1 = NSLayoutConstraint(item: posterImage!, attribute: .centerX, relatedBy: .lessThanOrEqual, toItem: self, attribute: .trailing, multiplier: 0.2, constant: 0)
         layoutConstraint1.isActive = true
         
-        let layoutConstraint2 = NSLayoutConstraint(item: titleLabel!, attribute: .centerX, relatedBy: .lessThanOrEqual, toItem: self, attribute: .trailing, multiplier: 2/3, constant: 0)
+        let layoutConstraint2 = NSLayoutConstraint(item: titleLabel!, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 2/3, constant: 0)
         layoutConstraint2.isActive = true
-        let layoutConstraint3 = NSLayoutConstraint(item: overViewLabel!, attribute: .centerX, relatedBy: .lessThanOrEqual, toItem: self, attribute: .trailing, multiplier: 2/3, constant: 0)
+        let layoutConstraint3 = NSLayoutConstraint(item: overViewLabel!, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 2/3, constant: 0)
         layoutConstraint3.isActive = true
         
         NSLayoutConstraint.activate([
             titleLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/2),
-            titleLabel.topAnchor.constraint(equalTo: posterImage.topAnchor)
+//            titleLabel.topAnchor.constraint(equalTo: posterImage.)
         ])
         
         NSLayoutConstraint.activate([
@@ -78,9 +78,11 @@ class FeaturedMovieView: UIView {
             
         ])
         
+        
         NSLayoutConstraint.activate([
-            posterImage.heightAnchor.constraint(lessThanOrEqualTo: self.heightAnchor, multiplier: 0.8),
-            posterImage.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            posterImage.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5),
+            posterImage.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            posterImage.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: 2/3)
         ])
     }
 
