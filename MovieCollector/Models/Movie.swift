@@ -15,7 +15,7 @@ struct Movie: Equatable {
     let posterPath: String?
     let releaseDate: String?
     let adult: Bool?
-    let genreIds:[Int64?]
+    let genreIds:[Int64?]?
     let popularity:Float?
     let voteCount:Int64?
     let video:Bool?
@@ -23,13 +23,14 @@ struct Movie: Equatable {
     let backdropPath:String?
     let originalTitle:String?
     let originalLanguage:String?
+    let runtime:Double?
     
 }
 
 extension Movie: Decodable {
 
     enum CodingKeys: String, CodingKey {
-        case id, title, overview, adult, popularity, video
+        case id, title, overview, adult, popularity, video, runtime
         case posterPath  = "poster_path"
         case releaseDate = "release_date"
         case originalLanguage = "original_language"

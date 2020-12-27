@@ -162,6 +162,9 @@ class BrowseViewController: UINavigationController {
         APIConnect().getUpcomingMovies(languge: "en-US", region: "US") { (returnData) in
             self.upcomingMoviesData = returnData.movies
         }
+        APIConnect().getMovieCreditsFor(id: "733317") { (returnData) in
+            print(returnData)
+        }
     }
     
     func layoutConstraints() {
