@@ -116,4 +116,19 @@ class PosterIconView : UICollectionViewCell {
         layoutIfNeeded()
 
     }
+//    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+////        print("Touches Began")
+//    }
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        //Called with touch up and no other events
+////        print("touches ended")
+//        super.touchesEnded(touches, with: event)
+//        delegate?.posterWasTapped(self.movie)
+//        
+//    }
+//    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        //Called If view is scrolled
+////        print("touches cancelled")
+//    }
 }

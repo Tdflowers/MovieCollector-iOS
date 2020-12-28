@@ -21,9 +21,9 @@ class TabBarViewController: UITabBarController {
     }
     
     
-    lazy public var initialTabBar: BrowseViewController = {
+    lazy public var initialTabBar: BrowseNavigationController = {
            
-           let initialTabBar = BrowseViewController()
+           let initialTabBar = BrowseNavigationController()
            
            let title = "Browse"
            

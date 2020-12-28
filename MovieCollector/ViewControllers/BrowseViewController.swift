@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BrowseViewController: UINavigationController {
+class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
     
     var popularMoviesData:[Movie] = [] {
         didSet {
@@ -64,6 +64,7 @@ class BrowseViewController: UINavigationController {
         view.backgroundColor = .clear
         view.dataSource = view
         view.delegate = view
+        view.allowsSelection = true
         view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return view
@@ -78,6 +79,7 @@ class BrowseViewController: UINavigationController {
         view.backgroundColor = .clear
         view.dataSource = view
         view.delegate = view
+        view.allowsSelection = true
         view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return view
@@ -92,6 +94,7 @@ class BrowseViewController: UINavigationController {
         view.backgroundColor = .clear
         view.dataSource = view
         view.delegate = view
+        view.allowsSelection = true
         view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return view
@@ -131,7 +134,12 @@ class BrowseViewController: UINavigationController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setNavigationBarHidden(true, animated: animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
     override func viewDidLoad() {
@@ -140,6 +148,8 @@ class BrowseViewController: UINavigationController {
         
         self.view.backgroundColor = .systemBackground
 //            .background(Color(UIColor.systemBackground))
+        
+//        self.setViewControllers(self, animated: true)
 
         self.view.addSubview(scrollView)
         scrollView.addSubview(stackView)
@@ -152,6 +162,10 @@ class BrowseViewController: UINavigationController {
         stackView.addArrangedSubview(upcomingTitleLabel)
         stackView.addArrangedSubview(upcomingMoviesCollectionView)
         layoutConstraints()
+        
+        popularMoviesCollectionView.posterDelegate = self
+        nowPlayingMoviesCollectionView.posterDelegate = self
+        upcomingMoviesCollectionView.posterDelegate = self
         
         APIConnect().getPopularMovies(languge: "en-US", region: "US") { (returnData) in
             self.popularMoviesData = returnData.movies
@@ -223,7 +237,13 @@ class BrowseViewController: UINavigationController {
     func updateUpcomingMoviesView() {
         upcomingMoviesCollectionView.moviesData = upcomingMoviesData
     }
-
-
+    
+    func posterWasTappedWithMovie(_ movie: Movie) {
+//        print(movie)
+        let newViewController = MovieDetailViewController()
+        newViewController.movie = movie
+        newViewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
 }
 

@@ -13,6 +13,8 @@
 		845BB6CD259854AC00BE84A9 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845BB6CC259854AC00BE84A9 /* Credits.swift */; };
 		845BB6D2259854B800BE84A9 /* Cast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845BB6D1259854B800BE84A9 /* Cast.swift */; };
 		846749FA25933F0700C15CDE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846749F925933F0700C15CDE /* Color+.swift */; };
+		847209F22599939600A32017 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847209F12599939600A32017 /* MovieDetailViewController.swift */; };
+		847209FA2599A0D500A32017 /* BrowseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847209F92599A0D500A32017 /* BrowseNavigationController.swift */; };
 		848AD1C02593014A0082FED5 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 848AD1BF2593014A0082FED5 /* Nuke */; };
 		848AD1C5259303D20082FED5 /* PosterIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848AD1C4259303D20082FED5 /* PosterIconView.swift */; };
 		848AD1CE25932BA00082FED5 /* PosterIconCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848AD1CD25932BA00082FED5 /* PosterIconCollectionView.swift */; };
@@ -58,6 +60,8 @@
 		845BB6CC259854AC00BE84A9 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
 		845BB6D1259854B800BE84A9 /* Cast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cast.swift; sourceTree = "<group>"; };
 		846749F925933F0700C15CDE /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		847209F12599939600A32017 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
+		847209F92599A0D500A32017 /* BrowseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseNavigationController.swift; sourceTree = "<group>"; };
 		848AD1C4259303D20082FED5 /* PosterIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconView.swift; sourceTree = "<group>"; };
 		848AD1CD25932BA00082FED5 /* PosterIconCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconCollectionView.swift; sourceTree = "<group>"; };
 		84993AE22592A0E600EFD094 /* MovieCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,9 +153,9 @@
 				84993B322592A89F00EFD094 /* Secrets.swift */,
 				84993B2E2592A86000EFD094 /* Lauch Files */,
 				84993B2D2592A85600EFD094 /* ViewControllers */,
+				848AD1C9259303EB0082FED5 /* Views */,
 				84993AEE2592A0E700EFD094 /* Assets.xcassets */,
 				84993AF32592A0E700EFD094 /* Info.plist */,
-				848AD1C9259303EB0082FED5 /* Views */,
 			);
 			path = MovieCollector;
 			sourceTree = "<group>";
@@ -178,6 +182,8 @@
 			isa = PBXGroup;
 			children = (
 				84993AE92592A0E600EFD094 /* BrowseViewController.swift */,
+				847209F92599A0D500A32017 /* BrowseNavigationController.swift */,
+				847209F12599939600A32017 /* MovieDetailViewController.swift */,
 				84993B282592A3A700EFD094 /* ProfileViewController.swift */,
 				84993B232592A39800EFD094 /* SearchViewController.swift */,
 				84993B1B2592A1EF00EFD094 /* TabBarViewController.swift */,
@@ -357,7 +363,9 @@
 				84993B292592A3A700EFD094 /* ProfileViewController.swift in Sources */,
 				84993B452592B09F00EFD094 /* PopularMovieResults.swift in Sources */,
 				84993B242592A39800EFD094 /* SearchViewController.swift in Sources */,
+				847209F22599939600A32017 /* MovieDetailViewController.swift in Sources */,
 				845005342593DB2000ABEFA7 /* UpcomingMovies.swift in Sources */,
+				847209FA2599A0D500A32017 /* BrowseNavigationController.swift in Sources */,
 				848AD1CE25932BA00082FED5 /* PosterIconCollectionView.swift in Sources */,
 				8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */,
 				84993B402592B09A00EFD094 /* Movie.swift in Sources */,

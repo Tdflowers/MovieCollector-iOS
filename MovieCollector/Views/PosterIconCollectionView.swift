@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol PosterIconCollectionViewDelegate {
+    func posterWasTappedWithMovie(_ movie:Movie)
+}
+
 class PosterIconCollectionView: UICollectionView {
     
     var moviesData:[Movie] = [] {
@@ -16,6 +20,8 @@ class PosterIconCollectionView: UICollectionView {
             }
         }
     }
+    
+    var posterDelegate:PosterIconCollectionViewDelegate?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -58,5 +64,7 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
         return CGSize.init(width: width, height: height)
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        posterDelegate?.posterWasTappedWithMovie(moviesData[indexPath.row])
+    }
 }
