@@ -105,9 +105,10 @@ class APIConnect: NSObject {
         task.resume()
     }
     
-    func getMovieDetailsFor(id: String, completion: @escaping (Movie) -> ()) {
+    func getMovieDetailsFor(id: Int64, completion: @escaping (Movie) -> ()) {
+        let idString = String(id)
         
-        let urlString = APIBASEURL + "/movie/" + id
+        let urlString = APIBASEURL + "/movie/" + idString
         
         var urlComponents = URLComponents(string: urlString)
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
@@ -136,9 +137,10 @@ class APIConnect: NSObject {
         task.resume()
     }
     
-    func getMovieCreditsFor(id: String, completion: @escaping (Credits) -> ()) {
+    func getMovieCreditsFor(id: Int64, completion: @escaping (Credits) -> ()) {
+        let idString = String(id)
         
-        let urlString = APIBASEURL + "/movie/" + id + "/credits"
+        let urlString = APIBASEURL + "/movie/" + idString + "/credits"
         
         var urlComponents = URLComponents(string: urlString)
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]

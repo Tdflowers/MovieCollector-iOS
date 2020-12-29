@@ -37,6 +37,7 @@ class FeaturedMovieView: UIView {
         posterImage = PosterIconView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         posterImage.shouldShowTitle = false
         posterImage.translatesAutoresizingMaskIntoConstraints = false
+        posterImage.backgroundColor = .clear
         self.addSubview(posterImage)
             
         titleLabel = UILabel.init(frame: .zero)
