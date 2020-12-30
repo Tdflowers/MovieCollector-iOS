@@ -37,7 +37,7 @@ class MovieDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.font = UIFont(name: "AvenirNext-Regular", size: 14)
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         label.textAlignment = .center
         return label
     }()
@@ -47,7 +47,7 @@ class MovieDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.font = UIFont(name: "AvenirNext-Regular", size: 14)
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         label.textAlignment = .center
         return label
     }()
@@ -57,7 +57,17 @@ class MovieDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.font = UIFont(name: "AvenirNext-Regular", size: 14)
-        label.numberOfLines = 1
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        return label
+    }()
+    
+    var directorLabel:UILabel = {
+        let label = UILabel.init()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.font = UIFont(name: "AvenirNext-Regular", size: 14)
+        label.numberOfLines = 2
         label.textAlignment = .center
         return label
     }()
@@ -74,18 +84,10 @@ class MovieDetailViewController: UIViewController {
             }
         }
         
-        APIConnect().getMovieCreditsFor(id: movie.id!) { results in
-            self.crew = results.crew
-            self.cast = results.cast
-            DispatchQueue.main.async {
-//                self.updateNewCastDetails()
-                print("Got cast and crew")
-                for crewMember in self.crew! {
-                    if crewMember.job == "Director" {
-//                        print(crewMember)
-                    }
-                }
-            }
+        APIConnect().getMovieCreditsFor(id: movie.id!) { [weak self]results in
+            self?.crew = results.crew
+            self?.cast = results.cast
+            self?.updateCastDetails()
         }
         
         self.navigationItem.title = movie.title
@@ -96,11 +98,13 @@ class MovieDetailViewController: UIViewController {
         
         self.view.addSubview(yearLabel)
         if let dateString = movie.releaseDate {
-            yearLabel.text = String("(" + dateString.prefix(4) + ")")
+            
+            let year = String(dateString.prefix(4))
+            yearLabel.attributedText = self.generateBoldRegularAttributedString(boldString: "Released", regularString: year)
         }
         
         self.view.addSubview(runtimeLabel)
-        
+        self.view.addSubview(directorLabel)
         self.view.addSubview(ratingLabel)
         
         self.view.addSubview(posterImageView)
@@ -137,11 +141,39 @@ class MovieDetailViewController: UIViewController {
     func updateNewMovieDetails() {
         if let runtimeDouble = movie.runtime {
             let (h,m) = minutesToHoursMinutes(minutes: runtimeDouble)
-            runtimeLabel.text = String(format:"%.0fh %.0fm", h, m)
+            let timeString = String(format:"%.0fh %.0fm", h, m)
+            runtimeLabel.attributedText = generateBoldRegularAttributedString(boldString: "Runtime", regularString: timeString)
         }
         if let ratingDouble = movie.voteAverage {
-            ratingLabel.text = String(ratingDouble) + "/10"
+            let ratingString = String(ratingDouble) + "/10"
+            ratingLabel.attributedText = generateBoldRegularAttributedString(boldString: "Rating", regularString: ratingString)
         }
+    }
+    
+    func updateCastDetails () {
+        DispatchQueue.main.async {
+            for crewMember in self.crew! {
+                if crewMember.job == "Director" {
+                    self.directorLabel.attributedText = self.generateBoldRegularAttributedString(boldString: "Director", regularString: crewMember.name!)
+                }
+            }
+        }
+    }
+    
+    func generateBoldRegularAttributedString (boldString: String, regularString: String) -> NSAttributedString {
+        
+        let attrs1 = [NSAttributedString.Key.font : UIFont(name: "AvenirNext-Bold", size: 12)]
+
+        let attrs2 = [NSAttributedString.Key.font : UIFont(name: "AvenirNext-Regular", size: 14)]
+
+        let attributedString1 = NSMutableAttributedString(string:boldString + "\n", attributes:attrs1 as [NSAttributedString.Key : Any])
+
+        let attributedString2 = NSMutableAttributedString(string:regularString, attributes:attrs2 as [NSAttributedString.Key : Any])
+
+       attributedString1.append(attributedString2)
+        
+        return attributedString1
+        
     }
     
     func layoutConstraints () {
@@ -183,6 +215,12 @@ class MovieDetailViewController: UIViewController {
             ratingLabel.topAnchor.constraint(equalTo: yearLabel.bottomAnchor, constant: 15),
             ratingLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/5),
             ratingLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            directorLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 15),
+            directorLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3),
+            directorLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor)
         ])
     }
     
