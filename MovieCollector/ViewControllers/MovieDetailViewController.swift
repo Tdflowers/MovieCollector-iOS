@@ -71,6 +71,17 @@ class MovieDetailViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+    
+    var overviewLabel:UILabel = {
+        let label = UILabel.init()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = ""
+        label.font = UIFont(name: "AvenirNext-Regular", size: 12)
+        label.numberOfLines = 6
+        label.textAlignment = .center
+        label.isUserInteractionEnabled = true
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,7 +109,6 @@ class MovieDetailViewController: UIViewController {
         
         self.view.addSubview(yearLabel)
         if let dateString = movie.releaseDate {
-            
             let year = String(dateString.prefix(4))
             yearLabel.attributedText = self.generateBoldRegularAttributedString(boldString: "Released", regularString: year)
         }
@@ -106,6 +116,15 @@ class MovieDetailViewController: UIViewController {
         self.view.addSubview(runtimeLabel)
         self.view.addSubview(directorLabel)
         self.view.addSubview(ratingLabel)
+        
+        let overviewLabelTapGesture = UITapGestureRecognizer.init(target: self, action: #selector(overviewLabelTapped))
+        overviewLabelTapGesture.numberOfTapsRequired = 1
+        overviewLabel.addGestureRecognizer(overviewLabelTapGesture)
+        
+        self.view.addSubview(overviewLabel)
+        if let overviewString = movie.overview {
+            overviewLabel.attributedText = generateBoldRegularAttributedString(boldString: "Overview", regularString: overviewString)
+        }
         
         self.view.addSubview(posterImageView)
         loadPoster()
@@ -176,6 +195,14 @@ class MovieDetailViewController: UIViewController {
         
     }
     
+    @objc func overviewLabelTapped() {
+        let newViewController = MoreDetailTextViewController()
+        newViewController.detailText = movie.overview!
+        newViewController.navigationTitle = "Overview"
+        newViewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+    
     func layoutConstraints () {
         
         let layoutConstraint2 = NSLayoutConstraint(item: titleLabel, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 2/3, constant: 0)
@@ -221,6 +248,12 @@ class MovieDetailViewController: UIViewController {
             directorLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 15),
             directorLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3),
             directorLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            overviewLabel.topAnchor.constraint(equalTo: directorLabel.bottomAnchor, constant: 15),
+            overviewLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
+            overviewLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
     }
     
