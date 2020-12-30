@@ -251,7 +251,8 @@ class MovieDetailViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            overviewLabel.topAnchor.constraint(equalTo: directorLabel.bottomAnchor, constant: 15),
+            overviewLabel.topAnchor.constraint(greaterThanOrEqualTo: directorLabel.bottomAnchor, constant: 15),
+            overviewLabel.topAnchor.constraint(greaterThanOrEqualTo: posterImageView.bottomAnchor, constant: 15),
             overviewLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
             overviewLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])

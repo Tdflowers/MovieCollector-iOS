@@ -167,6 +167,10 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
         nowPlayingMoviesCollectionView.posterDelegate = self
         upcomingMoviesCollectionView.posterDelegate = self
         
+        let featuredTapGesture = UITapGestureRecognizer.init(target: self, action: #selector(featuredViewWasTapped))
+        featuredTapGesture.numberOfTapsRequired = 1
+        featuredView.addGestureRecognizer(featuredTapGesture)
+        
         APIConnect().getPopularMovies(languge: "en-US", region: "US") { (returnData) in
             self.popularMoviesData = returnData.movies
         }
@@ -242,6 +246,13 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
 //        print(movie)
         let newViewController = MovieDetailViewController()
         newViewController.movie = movie
+        newViewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+    
+    @objc func featuredViewWasTapped() {
+        let newViewController = MovieDetailViewController()
+        newViewController.movie = featuredView.movie
         newViewController.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
