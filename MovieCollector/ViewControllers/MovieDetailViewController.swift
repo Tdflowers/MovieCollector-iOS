@@ -88,14 +88,16 @@ class MovieDetailViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        APIConnect().getMovieDetailsFor(id: movie.id!) { movie in
+        let apiConnect = APIConnect.shared()
+        
+        apiConnect.getMovieDetailsFor(id: movie.id!) { movie in
             self.movie = movie
             DispatchQueue.main.async {
                 self.updateNewMovieDetails()
             }
         }
         
-        APIConnect().getMovieCreditsFor(id: movie.id!) { [weak self]results in
+        apiConnect.getMovieCreditsFor(id: movie.id!) { [weak self]results in
             self?.crew = results.crew
             self?.cast = results.cast
             self?.updateCastDetails()

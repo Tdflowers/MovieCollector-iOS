@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8422FCA0259EA7FA00B3AE1F /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 8422FC9F259EA7FA00B3AE1F /* Cache */; };
+		8422FCA8259F16CF00B3AE1F /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8422FCA7259F16CF00B3AE1F /* Cache.swift */; };
 		844609C825943B2A00297198 /* FeaturedMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844609C725943B2A00297198 /* FeaturedMovieView.swift */; };
 		8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */; };
 		845005342593DB2000ABEFA7 /* UpcomingMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845005332593DB2000ABEFA7 /* UpcomingMovies.swift */; };
@@ -55,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8422FCA7259F16CF00B3AE1F /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		844609C725943B2A00297198 /* FeaturedMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeaturedMovieView.swift; path = MovieCollector/Views/FeaturedMovieView.swift; sourceTree = SOURCE_ROOT; };
 		8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingMovies.swift; sourceTree = "<group>"; };
 		845005332593DB2000ABEFA7 /* UpcomingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingMovies.swift; sourceTree = "<group>"; };
@@ -96,6 +99,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				848AD1C02593014A0082FED5 /* Nuke in Frameworks */,
+				8422FCA0259EA7FA00B3AE1F /* Cache in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				84993B372592AAF000EFD094 /* APIConnect.swift */,
+				8422FCA7259F16CF00B3AE1F /* Cache.swift */,
 				84993B582592B35C00EFD094 /* Helpers */,
 				84993B492592B0A400EFD094 /* Models */,
 				84993B322592A89F00EFD094 /* Secrets.swift */,
@@ -245,6 +250,7 @@
 			name = MovieCollector;
 			packageProductDependencies = (
 				848AD1BF2593014A0082FED5 /* Nuke */,
+				8422FC9F259EA7FA00B3AE1F /* Cache */,
 			);
 			productName = MovieCollector;
 			productReference = 84993AE22592A0E600EFD094 /* MovieCollector.app */;
@@ -319,6 +325,7 @@
 			mainGroup = 84993AD92592A0E600EFD094;
 			packageReferences = (
 				848AD1BE2593014A0082FED5 /* XCRemoteSwiftPackageReference "Nuke" */,
+				8422FC9E259EA7FA00B3AE1F /* XCRemoteSwiftPackageReference "Cache" */,
 			);
 			productRefGroup = 84993AE32592A0E600EFD094 /* Products */;
 			projectDirPath = "";
@@ -372,6 +379,7 @@
 				847209FA2599A0D500A32017 /* BrowseNavigationController.swift in Sources */,
 				848AD1CE25932BA00082FED5 /* PosterIconCollectionView.swift in Sources */,
 				8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */,
+				8422FCA8259F16CF00B3AE1F /* Cache.swift in Sources */,
 				84993B402592B09A00EFD094 /* Movie.swift in Sources */,
 				84993B332592A89F00EFD094 /* Secrets.swift in Sources */,
 				84993B1C2592A1EF00EFD094 /* TabBarViewController.swift in Sources */,
@@ -562,7 +570,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzproductions.MovieCollector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -581,7 +589,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzproductions.MovieCollector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -711,6 +719,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8422FC9E259EA7FA00B3AE1F /* XCRemoteSwiftPackageReference "Cache" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hyperoslo/Cache";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
 		848AD1BE2593014A0082FED5 /* XCRemoteSwiftPackageReference "Nuke" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kean/Nuke.git";
@@ -722,6 +738,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8422FC9F259EA7FA00B3AE1F /* Cache */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8422FC9E259EA7FA00B3AE1F /* XCRemoteSwiftPackageReference "Cache" */;
+			productName = Cache;
+		};
 		848AD1BF2593014A0082FED5 /* Nuke */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 848AD1BE2593014A0082FED5 /* XCRemoteSwiftPackageReference "Nuke" */;

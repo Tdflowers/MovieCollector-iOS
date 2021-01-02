@@ -27,7 +27,7 @@ struct Movie: Equatable {
     
 }
 
-extension Movie: Decodable {
+extension Movie: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, title, overview, adult, popularity, video, runtime

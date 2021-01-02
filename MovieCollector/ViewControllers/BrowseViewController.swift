@@ -166,18 +166,20 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
         popularMoviesCollectionView.posterDelegate = self
         nowPlayingMoviesCollectionView.posterDelegate = self
         upcomingMoviesCollectionView.posterDelegate = self
-        
+                
         let featuredTapGesture = UITapGestureRecognizer.init(target: self, action: #selector(featuredViewWasTapped))
         featuredTapGesture.numberOfTapsRequired = 1
         featuredView.addGestureRecognizer(featuredTapGesture)
         
-        APIConnect().getPopularMovies(languge: "en-US", region: "US") { (returnData) in
+        let apiConnect = APIConnect.shared()
+       
+        apiConnect.getPopularMovies(languge: "en-US", region: "US") { (returnData) in
             self.popularMoviesData = returnData.movies
         }
-        APIConnect().getNowPlayingMovies(languge: "en-US", region: "US") { (returnData) in
+        apiConnect.getNowPlayingMovies(languge: "en-US", region: "US") { (returnData) in
             self.nowPlayingMoviesData = returnData.movies
         }
-        APIConnect().getUpcomingMovies(languge: "en-US", region: "US") { (returnData) in
+        apiConnect.getUpcomingMovies(languge: "en-US", region: "US") { (returnData) in
             self.upcomingMoviesData = returnData.movies
         }
     }
