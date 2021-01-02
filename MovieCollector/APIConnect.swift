@@ -11,7 +11,34 @@ import Foundation
 
 class APIConnect: NSObject {
     
-    
+    // MARK: - Properties
+
+   private static var sharedAPIConnect: APIConnect = {
+    let apiConnect = APIConnect(baseURL: APIBASEURL)
+
+       // Configuration
+       // ...
+
+       return apiConnect
+   }()
+
+   // MARK: -
+
+   let baseURL: String
+    let cache = Cache<Int64, Movie>()
+   // Initialization
+
+   private init(baseURL: String) {
+       self.baseURL = baseURL
+   }
+
+   // MARK: - Accessors
+
+   class func shared() -> APIConnect {
+       return sharedAPIConnect
+   }
+
+        
     func getPopularMovies(languge: String, region: String, completion: @escaping (PopularMovieResults) -> ()) {
         
         let urlString = APIBASEURL + "/movie/popular"
@@ -20,7 +47,6 @@ class APIConnect: NSObject {
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
         let request = URLRequest(url: urlComponents!.url!)
         
-        // Create and run a URLSession data task with our JSON encoded POST request
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
@@ -51,7 +77,6 @@ class APIConnect: NSObject {
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
         let request = URLRequest(url: urlComponents!.url!)
         
-        // Create and run a URLSession data task with our JSON encoded POST request
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
@@ -59,7 +84,6 @@ class APIConnect: NSObject {
                 return
             }
             
-            // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let _ = String(data: data, encoding: .utf8) {
                 do {
                     let moviesResults = try JSONDecoder().decode(NowPlayingMovies.self, from: data)
@@ -82,7 +106,6 @@ class APIConnect: NSObject {
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
         let request = URLRequest(url: urlComponents!.url!)
         
-        // Create and run a URLSession data task with our JSON encoded POST request
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
@@ -90,7 +113,6 @@ class APIConnect: NSObject {
                 return
             }
             
-            // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let _ = String(data: data, encoding: .utf8) {
                 do {
                     let moviesResults = try JSONDecoder().decode(UpcomingMovies.self, from: data)
@@ -107,14 +129,12 @@ class APIConnect: NSObject {
     
     func getMovieDetailsFor(id: Int64, completion: @escaping (Movie) -> ()) {
         let idString = String(id)
-        
         let urlString = APIBASEURL + "/movie/" + idString
         
         var urlComponents = URLComponents(string: urlString)
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
         let request = URLRequest(url: urlComponents!.url!)
         
-        // Create and run a URLSession data task with our JSON encoded POST request
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
@@ -122,7 +142,6 @@ class APIConnect: NSObject {
                 return
             }
             
-            // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let _ = String(data: data, encoding: .utf8) {
                 do {
                     let moviesResults = try JSONDecoder().decode(Movie.self, from: data)
@@ -146,7 +165,6 @@ class APIConnect: NSObject {
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
         let request = URLRequest(url: urlComponents!.url!)
         
-        // Create and run a URLSession data task with our JSON encoded POST request
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
@@ -154,7 +172,6 @@ class APIConnect: NSObject {
                 return
             }
             
-            // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let _ = String(data: data, encoding: .utf8) {
                 do {
                     let moviesResults = try JSONDecoder().decode(Credits.self, from: data)
