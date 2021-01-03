@@ -142,7 +142,7 @@ class MovieDetailViewController: UIViewController {
     
     func loadPoster () {
         if let poster = movie.posterPath {
-            let urlString = APIIMAGEBASEURL + "w500" + poster
+            let urlString = APIIMAGEBASEURL + "w185" + poster
             let urlComponents = URLComponents(string: urlString)
             if let url = urlComponents!.url {
                 let imageRequest = ImageRequest.init(url: url)

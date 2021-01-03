@@ -62,7 +62,7 @@ class PosterIconView : UICollectionViewCell {
             }
             
             if let poster = movie.posterPath {
-                let urlString = APIIMAGEBASEURL + "w500" + poster
+                let urlString = APIIMAGEBASEURL + "w300" + poster
                 let urlComponents = URLComponents(string: urlString)
                 if let url = urlComponents!.url {
                     let imageRequest = ImageRequest.init(url: url)

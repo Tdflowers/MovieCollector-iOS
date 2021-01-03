@@ -79,6 +79,11 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    
+        if searchText == "" {
+            self.searchResultsCollectionView.moviesData = []
+            return
+        }
         // Cancel the currently pending item
         pendingRequestWorkItem?.cancel()
 
@@ -88,6 +93,9 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
             apic.getSearchResults(languge: "en-US", region: "US", query: searchText, page: "1") { results in
 //                self?.updateSearchResults(results: results)
                 self?.searchResultsCollectionView.moviesData = results.movies
+                self?.searchResultsCollectionView.searchQuery = searchText
+                self?.searchResultsCollectionView.currentPageNumber = 1
+                self?.searchResultsCollectionView.pageMax = results.totalPages
             }
         }
         // Save the new work item and execute it after 250 ms

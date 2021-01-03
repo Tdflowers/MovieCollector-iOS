@@ -24,6 +24,8 @@ class PosterIconCollectionView: UICollectionView {
     var isHorizontal = true
     
     var currentPageNumber = 1
+    var searchQuery:String?
+    var pageMax:Double?
     
     var posterDelegate:PosterIconCollectionViewDelegate?
     
@@ -75,7 +77,17 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if (indexPath.row == moviesData.count - 1 ) { //it's your last cell
-
+            if let search = searchQuery {
+                currentPageNumber = currentPageNumber + 1
+                if let pageMaxInt = pageMax {
+                    if Int(pageMaxInt) >= currentPageNumber {
+                        let pageString = String(currentPageNumber)
+                        APIConnect.shared().getSearchResults(languge: "en-US", region: "US", query: search, page: pageString) { results in
+                            self.moviesData += results.movies
+                        }
+                    }
+                }
+            }
         }
     }
     
