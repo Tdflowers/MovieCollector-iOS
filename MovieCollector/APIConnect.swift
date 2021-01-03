@@ -127,6 +127,35 @@ class APIConnect: NSObject {
         task.resume()
     }
     
+    func getSearchResults(languge: String, region: String, query: String, page: String,completion: @escaping (MovieSearchResults) -> ()) {
+        
+        let urlString = APIBASEURL + "/search/movie"
+        
+        var urlComponents = URLComponents(string: urlString)
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region), URLQueryItem(name: "page", value: page), URLQueryItem(name: "query", value: query)]
+        let request = URLRequest(url: urlComponents!.url!)
+        
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                return
+            }
+            
+            if let data = responseData, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    let movieSearchResults = try JSONDecoder().decode(MovieSearchResults.self, from: data)
+                    completion(movieSearchResults)
+                } catch let error {
+                    print(error as Any)
+                }
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
+    
     func getMovieDetailsFor(id: Int64, completion: @escaping (Movie) -> ()) {
         let idString = String(id)
         let urlString = APIBASEURL + "/movie/" + idString

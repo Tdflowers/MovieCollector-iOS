@@ -21,6 +21,10 @@ class PosterIconCollectionView: UICollectionView {
         }
     }
     
+    var isHorizontal = true
+    
+    var currentPageNumber = 1
+    
     var posterDelegate:PosterIconCollectionViewDelegate?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -55,13 +59,24 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        var width:CGFloat = 0.0
-        
-        let height = collectionView.frame.size.height - 20
-        
-        width = height * 1/2
-        return CGSize.init(width: width, height: height)
+        if isHorizontal {
+            var width:CGFloat = 0.0
+            
+            let height = collectionView.frame.size.height - 20
+            
+            width = height * 1/2
+            return CGSize.init(width: width, height: height)
+        } else {
+            let width = collectionView.frame.size.width/4
+            return CGSize.init(width: width, height: width*2)
+        }
+       
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if (indexPath.row == moviesData.count - 1 ) { //it's your last cell
+
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

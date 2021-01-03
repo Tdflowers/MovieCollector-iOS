@@ -38,9 +38,9 @@ class TabBarViewController: UITabBarController {
            return initialTabBar
        }()
     
-    lazy public var middleTabBar: SearchViewController = {
+    lazy public var middleTabBar: SearchNavigationController = {
            
-           let middleTabBar = SearchViewController()
+           let middleTabBar = SearchNavigationController()
            
            let title = "Search"
            
