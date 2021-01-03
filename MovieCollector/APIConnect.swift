@@ -54,7 +54,6 @@ class APIConnect: NSObject {
                 return
             }
             
-            // APIs usually respond with the data you just sent in your POST request
             if let data = responseData, let _ = String(data: data, encoding: .utf8) {
                 do {
                     let moviesResults = try JSONDecoder().decode(PopularMovieResults.self, from: data)
