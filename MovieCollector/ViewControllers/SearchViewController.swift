@@ -49,6 +49,8 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
         layoutSubviews()
         
         searchResultsCollectionView.posterDelegate = self
+        
+        searchBar.becomeFirstResponder()
 
     }
     
@@ -90,8 +92,16 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
         }
         // Save the new work item and execute it after 250 ms
         pendingRequestWorkItem = requestWorkItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250),
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500),
                                       execute: requestWorkItem)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
     func updateSearchResults(results: MovieSearchResults) {
@@ -99,7 +109,9 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
     }
     
     func posterWasTappedWithMovie(_ movie: Movie) {
-//        print(movie)
+        
+        searchBar.resignFirstResponder()
+        
         let newViewController = MovieDetailViewController()
         newViewController.movie = movie
         newViewController.modalPresentationStyle = .fullScreen
