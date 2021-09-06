@@ -6,6 +6,7 @@
 
 ## Storing some api keys and stuff that you don't want to be uploaded on Github
 Secrets.swift
+GoogleService-Info.plist
 
 # Icon must end with two \r
 Icon
