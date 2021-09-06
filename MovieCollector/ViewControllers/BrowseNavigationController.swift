@@ -12,10 +12,7 @@ class BrowseNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
         let bvc = BrowseViewController()
-        
         self.setViewControllers([bvc], animated: false)
     }
     

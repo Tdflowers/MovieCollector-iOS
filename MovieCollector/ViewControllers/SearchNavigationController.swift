@@ -11,11 +11,8 @@ class SearchNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         let svc = SearchViewController()
-        
         self.setViewControllers([svc], animated: false)
     }
     
