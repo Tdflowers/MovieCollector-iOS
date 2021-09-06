@@ -22,6 +22,7 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
         view.dataSource = view
         view.delegate = view
         view.isHorizontal = false
+        view.keyboardDismissMode = .onDrag
         view.allowsSelection = true
         view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -51,13 +52,26 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
         searchResultsCollectionView.posterDelegate = self
         
         searchBar.becomeFirstResponder()
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+               tap.cancelsTouchesInView = false
+               searchResultsCollectionView.addGestureRecognizer(tap)
 
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        
+        if searchBar.text == "" {
+            searchBar.becomeFirstResponder()
+        }
     }
     
+    
+    @objc func dismissKeyboard() {
+        searchBar.resignFirstResponder()
+    }
+
     var scrollView:UIScrollView = {
         let scrollView = UIScrollView()
 
