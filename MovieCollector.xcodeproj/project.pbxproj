@@ -147,7 +147,6 @@
 		84993AD92592A0E600EFD094 = {
 			isa = PBXGroup;
 			children = (
-				84BD862E26DEE2E100D49672 /* LoginFlow.swift */,
 				84993AE42592A0E600EFD094 /* MovieCollector */,
 				84993AFB2592A0E700EFD094 /* MovieCollectorTests */,
 				84993B062592A0E700EFD094 /* MovieCollectorUITests */,
@@ -204,6 +203,7 @@
 		84993B2D2592A85600EFD094 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				84BD862E26DEE2E100D49672 /* LoginFlow.swift */,
 				84993AE92592A0E600EFD094 /* BrowseViewController.swift */,
 				847209F92599A0D500A32017 /* BrowseNavigationController.swift */,
 				84FF06B625A1546E00378690 /* SearchNavigationController.swift */,

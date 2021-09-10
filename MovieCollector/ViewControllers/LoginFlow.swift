@@ -36,7 +36,7 @@ struct LoginFlow: View {
                     .foregroundColor(Color.white)
                     .padding(.bottom, 7)
                 })
-                .background(Color.black)
+                .background(Color.init(Color.RGBColorSpace.sRGB, white: 0, opacity: 0.75))
                 .cornerRadius(19)
                 .padding()
                 .shadow(color: Color.black.opacity(0.3),
@@ -66,7 +66,6 @@ struct LoginFlow: View {
             Text("\(errorString)")
                 .lineLimit(2)
                 .padding()
-
         }
     }
     
