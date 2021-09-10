@@ -82,6 +82,16 @@ class MovieDetailViewController: UIViewController {
         label.isUserInteractionEnabled = true
         return label
     }()
+    
+    var listUpdateButton:UIButton = {
+        let button = UIButton.init(type: UIButton.ButtonType.roundedRect)
+        button.setTitle("Add to Watched", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isUserInteractionEnabled = true
+        button.addTarget(self, action: #selector(addRemoveFromWatchList), for: .touchUpInside)
+
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,6 +140,8 @@ class MovieDetailViewController: UIViewController {
         
         self.view.addSubview(posterImageView)
         loadPoster()
+        
+        self.view.addSubview(listUpdateButton)
         
         layoutConstraints()
     }
@@ -181,6 +193,10 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
+    @objc func addRemoveFromWatchList () {
+            
+    }
+    
     func generateBoldRegularAttributedString (boldString: String, regularString: String) -> NSAttributedString {
         
         let attrs1 = [NSAttributedString.Key.font : UIFont(name: "AvenirNext-Bold", size: 12)]
@@ -211,7 +227,14 @@ class MovieDetailViewController: UIViewController {
         layoutConstraint2.isActive = true
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            listUpdateButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+            listUpdateButton.heightAnchor.constraint(equalToConstant: 25),
+            listUpdateButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/3),
+            listUpdateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: listUpdateButton.bottomAnchor, constant: 15),
             titleLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/2)
         ])
         
