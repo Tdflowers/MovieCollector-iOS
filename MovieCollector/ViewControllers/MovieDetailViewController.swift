@@ -7,6 +7,8 @@
 
 import UIKit
 import Nuke
+import FirebaseFirestore
+import Firebase
 
 class MovieDetailViewController: UIViewController {
     
@@ -194,7 +196,23 @@ class MovieDetailViewController: UIViewController {
     }
     
     @objc func addRemoveFromWatchList () {
-            
+        //Add movie to list or remove if already added. Add basic details so details are only pulled per movie.
+        
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        
+        let movieId:String = String(movie.id!)
+        
+        let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
+        messageRef.getDocument { doc, error in
+            if let doc = doc {
+                if doc.exists {
+                    messageRef.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                } else {
+                    messageRef.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+
+                }
+            }
+        }
     }
     
     func generateBoldRegularAttributedString (boldString: String, regularString: String) -> NSAttributedString {
