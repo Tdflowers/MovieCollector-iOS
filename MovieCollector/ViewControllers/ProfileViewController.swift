@@ -8,8 +8,16 @@
 import UIKit
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 class ProfileViewController: UIViewController {
+    
+    var watchedMoviesData:[Movie] = [] {
+        didSet {
+            //Did get now playing movies
+            updatedWatchedMoviesView()
+        }
+    }
     
     var signUpButton:UIButton = {
         let button = UIButton.init(type: .roundedRect)
@@ -21,6 +29,21 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
+    var watchedMoviesCollectionView:PosterIconCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        
+        let view = PosterIconCollectionView.init(frame: .zero, collectionViewLayout: layout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.dataSource = view
+        view.delegate = view
+        view.allowsSelection = true
+        view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
+        view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return view
+    }()
+    
     var handle: AuthStateDidChangeListenerHandle?
 
     override func viewDidLoad() {
@@ -30,7 +53,7 @@ class ProfileViewController: UIViewController {
         
         
         if Auth.auth().currentUser != nil {
-            
+            view.addSubview(watchedMoviesCollectionView)
         } else {
             view.addSubview(signUpButton)
         }
@@ -47,6 +70,7 @@ class ProfileViewController: UIViewController {
         
         if Auth.auth().currentUser != nil {
             signUpButton.isHidden = true
+            updatedWatchedMoviesData()
         } else {
             view.addSubview(signUpButton)
         }
@@ -61,6 +85,13 @@ class ProfileViewController: UIViewController {
                 signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 signUpButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3)
             ])
+        } else {
+            NSLayoutConstraint.activate([
+                watchedMoviesCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
+                watchedMoviesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1),
+                watchedMoviesCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                watchedMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            ])
         }
     }
     
@@ -72,5 +103,32 @@ class ProfileViewController: UIViewController {
            }
            present(hostingController, animated: true, completion: nil)
 
+    }
+    
+    func updatedWatchedMoviesView() {
+        watchedMoviesCollectionView.moviesData = watchedMoviesData
+    }
+    
+    func updatedWatchedMoviesData() {
+        
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        
+        var tempArray:[Movie] = []
+        
+        let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
+        messageRef.getDocument { doc, error in
+            if let doc = doc {
+                if doc.exists {
+                    if let data = doc.data() {
+                        for (_, value) in data {
+                            if let movie = value as? Dictionary<String, Any> {
+                                tempArray.append(Movie.init(id: movie["movieDbId"] as! Int64, title: movie["title"] as! String, overview: nil, posterPath: movie["posterUrl"] as! String, releaseDate: nil, adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
+                            }
+                        self.watchedMoviesData = tempArray
+                        }
+                    }
+                }
+            }
+        }
     }
 }

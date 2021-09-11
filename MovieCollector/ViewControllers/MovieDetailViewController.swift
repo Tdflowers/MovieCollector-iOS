@@ -146,6 +146,22 @@ class MovieDetailViewController: UIViewController {
         self.view.addSubview(listUpdateButton)
         
         layoutConstraints()
+        
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        let movieId:String = String(movie.id!)
+        
+        let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
+        messageRef.getDocument { doc, error in
+            if let doc = doc {
+                if doc.exists {
+                    if let data = doc.data() {
+                        if let _ = data[movieId] as? NSDictionary {
+                            self.listUpdateButton.setTitle("Remove From Watched", for: .normal)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func minutesToHoursMinutes (minutes : Double) -> (Double, Double) {
@@ -206,9 +222,19 @@ class MovieDetailViewController: UIViewController {
         messageRef.getDocument { doc, error in
             if let doc = doc {
                 if doc.exists {
-                    messageRef.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                    if let data = doc.data() {
+                        if let _ = data[movieId] as? NSDictionary {
+                            messageRef.updateData([movieId: FieldValue.delete()])
+                            self.listUpdateButton.setTitle("Add to Watched", for: .normal)
+
+                        } else {
+                            messageRef.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                            self.listUpdateButton.setTitle("Remove from Watched", for: .normal)
+                        }
+                    }
                 } else {
                     messageRef.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                    self.listUpdateButton.setTitle("Remove From Watched", for: .normal)
 
                 }
             }
