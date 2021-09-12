@@ -95,7 +95,6 @@ struct LoginFlow: View {
                     }
                     self.dismiss?()
                 }
-
             }
         } else {
             

@@ -10,7 +10,11 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate {
+    
+    var messageRef:DocumentReference?
+    var listListener:ListenerRegistration?
+    var userId:String?
     
     var watchedMoviesData:[Movie] = [] {
         didSet {
@@ -54,6 +58,9 @@ class ProfileViewController: UIViewController {
         
         if Auth.auth().currentUser != nil {
             view.addSubview(watchedMoviesCollectionView)
+            userId = Auth.auth().currentUser?.uid
+            messageRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
+            updatedWatchedMoviesData()
         } else {
             view.addSubview(signUpButton)
         }
@@ -70,7 +77,8 @@ class ProfileViewController: UIViewController {
         
         if Auth.auth().currentUser != nil {
             signUpButton.isHidden = true
-            updatedWatchedMoviesData()
+//            updatedWatchedMoviesData()
+            watchedMoviesCollectionView.posterDelegate = self
         } else {
             view.addSubview(signUpButton)
         }
@@ -109,26 +117,37 @@ class ProfileViewController: UIViewController {
         watchedMoviesCollectionView.moviesData = watchedMoviesData
     }
     
+    func beginListeningForChangeInList () {
+        
+    }
+    
     func updatedWatchedMoviesData() {
         
-        guard let userID = Auth.auth().currentUser?.uid else { return }
-        
-        var tempArray:[Movie] = []
-        
-        let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
-        messageRef.getDocument { doc, error in
-            if let doc = doc {
-                if doc.exists {
-                    if let data = doc.data() {
-                        for (_, value) in data {
-                            if let movie = value as? Dictionary<String, Any> {
-                                tempArray.append(Movie.init(id: movie["movieDbId"] as! Int64, title: movie["title"] as! String, overview: nil, posterPath: movie["posterUrl"] as! String, releaseDate: nil, adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
-                            }
-                        self.watchedMoviesData = tempArray
+    var tempArray:[Movie] = []
+    
+        listListener = messageRef!.addSnapshotListener { doc, error in
+        if let doc = doc {
+            if doc.exists {
+                if let data = doc.data() {
+                    tempArray = []
+                    for (_, value) in data {
+                        if let movie = value as? Dictionary<String, Any> {
+                            tempArray.append(Movie.init(id: movie["movieDbId"] as! Int64, title: movie["title"] as! String, overview: nil, posterPath: movie["posterUrl"] as! String, releaseDate: nil, adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
                         }
                     }
+                    self.watchedMoviesData = tempArray
                 }
             }
         }
+    }
+}
+    func posterWasTappedWithMovie(_ movie: Movie) {
+        let newViewController = MovieDetailViewController()
+        newViewController.movie = movie
+        newViewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+    deinit {
+        listListener?.remove()
     }
 }

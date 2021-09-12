@@ -199,6 +199,15 @@ class MovieDetailViewController: UIViewController {
             let ratingString = String(ratingDouble) + "/10"
             ratingLabel.attributedText = generateBoldRegularAttributedString(boldString: "Rating", regularString: ratingString)
         }
+        
+        if let dateString = movie.releaseDate {
+            let year = String(dateString.prefix(4))
+            yearLabel.attributedText = self.generateBoldRegularAttributedString(boldString: "Released", regularString: year)
+        }
+        
+        if let overviewString = movie.overview {
+            overviewLabel.attributedText = generateBoldRegularAttributedString(boldString: "Overview", regularString: overviewString)
+        }
     }
     
     func updateCastDetails () {

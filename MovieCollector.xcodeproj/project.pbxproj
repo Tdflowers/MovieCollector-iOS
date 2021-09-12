@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F1052BC26ED512F00E8A74E /* ProfileNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1052BB26ED512F00E8A74E /* ProfileNavigationController.swift */; };
 		8422FCA0259EA7FA00B3AE1F /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 8422FC9F259EA7FA00B3AE1F /* Cache */; };
 		8422FCA8259F16CF00B3AE1F /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8422FCA7259F16CF00B3AE1F /* Cache.swift */; };
 		844609C825943B2A00297198 /* FeaturedMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844609C725943B2A00297198 /* FeaturedMovieView.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F1052BB26ED512F00E8A74E /* ProfileNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileNavigationController.swift; sourceTree = "<group>"; };
 		8422FCA7259F16CF00B3AE1F /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		844609C725943B2A00297198 /* FeaturedMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeaturedMovieView.swift; path = MovieCollector/Views/FeaturedMovieView.swift; sourceTree = SOURCE_ROOT; };
 		8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingMovies.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				84FF06B625A1546E00378690 /* SearchNavigationController.swift */,
 				847209F12599939600A32017 /* MovieDetailViewController.swift */,
 				84E2E1B9259C4A4C00441A1E /* MoreDetailTextViewController.swift */,
+				2F1052BB26ED512F00E8A74E /* ProfileNavigationController.swift */,
 				84993B282592A3A700EFD094 /* ProfileViewController.swift */,
 				84993B232592A39800EFD094 /* SearchViewController.swift */,
 				84993B1B2592A1EF00EFD094 /* TabBarViewController.swift */,
@@ -407,6 +410,7 @@
 				8422FCA8259F16CF00B3AE1F /* Cache.swift in Sources */,
 				84993B402592B09A00EFD094 /* Movie.swift in Sources */,
 				84993B332592A89F00EFD094 /* Secrets.swift in Sources */,
+				2F1052BC26ED512F00E8A74E /* ProfileNavigationController.swift in Sources */,
 				84993B1C2592A1EF00EFD094 /* TabBarViewController.swift in Sources */,
 				84993AEA2592A0E600EFD094 /* BrowseViewController.swift in Sources */,
 				84BD862F26DEE2E100D49672 /* LoginFlow.swift in Sources */,

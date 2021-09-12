@@ -56,9 +56,9 @@ class TabBarViewController: UITabBarController {
        }()
     
        
-       lazy public var finalTabBar: ProfileViewController = {
+       lazy public var finalTabBar: ProfileNavigationController = {
            
-           let finalTabBar = ProfileViewController()
+           let finalTabBar = ProfileNavigationController()
         
             let title = "Profile"
            
