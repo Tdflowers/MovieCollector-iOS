@@ -13,18 +13,23 @@ struct LoginFlow: View {
     
     var dismiss: (() -> Void)?
     
+    @State var showOnSignUp = false
+    
     @State private var username: String = ""
     @State private var password: String = ""
+    @State private var fullname: String = ""
     @State private var errorString: String = ""
+    
+    @State private var userName: String = ""
     
     @State var selected = 0
     
     @State var ref: Firestore!
     
     var body: some View {
-        
-        VStack (){
+        NavigationView {
             
+        VStack (){
             HStack {
                 Spacer()
                 Button(action: {
@@ -43,17 +48,27 @@ struct LoginFlow: View {
                         radius: 3, x: 3, y: 3)
             }
             Spacer()
-            Text("Enter Username") .foregroundColor(.primary)
-//                .padding(0)
-            TextField("Email", text: $username)
-                .textFieldStyle(RoundedBorderTextFieldStyle.init())
-                .padding(EdgeInsets.init(top: -5, leading: 20, bottom: 20, trailing: 20))
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            Text("Enter Password") .foregroundColor(.primary)
-            SecureField("Password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle.init())
-                .padding(EdgeInsets.init(top: -5, leading: 20, bottom: 20, trailing: 20))
+            Group() {
+                Text("Enter Name") .foregroundColor(.primary)
+                TextField("Your Name", text: $fullname)
+                    .textFieldStyle(RoundedBorderTextFieldStyle.init())
+                    .padding(EdgeInsets.init(top: -5, leading: 20, bottom: 20, trailing: 20))
+            }
+            Group() {
+                Text("Enter Email") .foregroundColor(.primary)
+    //                .padding(0)
+                TextField("Email", text: $username)
+                    .textFieldStyle(RoundedBorderTextFieldStyle.init())
+                    .padding(EdgeInsets.init(top: -5, leading: 20, bottom: 20, trailing: 20))
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+            }
+            Group() {
+                Text("Enter Password") .foregroundColor(.primary)
+                SecureField("Password", text: $password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle.init())
+                    .padding(EdgeInsets.init(top: -5, leading: 20, bottom: 20, trailing: 20))
+            }
             Picker(selection: $selected, label: Text(""), content: {
                            Text("Sign Up").tag(0)
                            Text("Login").tag(1)
@@ -66,7 +81,23 @@ struct LoginFlow: View {
             Text("\(errorString)")
                 .lineLimit(2)
                 .padding()
+            NavigationLink(destination: SecondView(), isActive: $showOnSignUp) {
+                EmptyView()
+            } .hidden()
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
         }
+        }
+
+
+    }
+    
+    struct SecondView: View {
+       var body: some View {
+        VStack {
+            Spacer()
+        }
+       }
     }
     
     func submitSignUp() {
@@ -74,6 +105,8 @@ struct LoginFlow: View {
         let tempPass = "\(password)"
         
         errorString = ""
+        
+//        showOnSignUp = true
         
         if selected == 0 {
             ref = Firestore.firestore()
@@ -85,7 +118,7 @@ struct LoginFlow: View {
                     return
                 } else {
                     if let authResult = authResult {
-                        self.ref.collection("users").document(authResult.user.uid).setData(["username":username]) { err in
+                        self.ref.collection("users").document(authResult.user.uid).setData(["email":username, "name":fullname]) { err in
                             if let err = err {
                                 print("Error writing document: \(err)")
                             } else {
@@ -94,15 +127,12 @@ struct LoginFlow: View {
                         }
                     }
                     self.dismiss?()
+                    
                 }
             }
         } else {
             
             Auth.auth().signIn(withEmail: tempUser, password: tempPass) {
-    //            [ self] authResult, error in
-    //          guard let strongSelf = self else { return }
-            
-    //        Auth.auth().createUser(withEmail: tempUser, password: tempPass) {
                 authResult, error in
                 if let error = error {
                     print(error.localizedDescription)
@@ -111,8 +141,7 @@ struct LoginFlow: View {
                 } else {
                     self.dismiss?()
                 }
-        }
-       
+            }
         }
     }
     
