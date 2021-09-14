@@ -33,6 +33,16 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         return button
     }()
     
+    var signOutButton:UIButton = {
+        let button = UIButton.init(type: .roundedRect)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Sign Out", for: .normal)
+        button.setTitleColor(.systemGreen, for: .normal)
+        button.backgroundColor = .systemRed
+        button.addTarget(self, action: #selector(signOutPressed), for: .touchUpInside)
+        return button
+    }()
+    
     var watchedMoviesCollectionView:PosterIconCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -58,6 +68,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         
         if Auth.auth().currentUser != nil {
             view.addSubview(watchedMoviesCollectionView)
+            view.addSubview(signOutButton)
             userId = Auth.auth().currentUser?.uid
             messageRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
             updatedWatchedMoviesData()
@@ -100,6 +111,12 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
                 watchedMoviesCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
                 watchedMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
+            NSLayoutConstraint.activate([
+                signOutButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/12),
+                signOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                signOutButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3)
+            ])
         }
     }
     
@@ -111,6 +128,10 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
            }
            present(hostingController, animated: true, completion: nil)
 
+    }
+    
+    @objc func signOutPressed () {
+        try! Auth.auth().signOut()
     }
     
     func updatedWatchedMoviesView() {
