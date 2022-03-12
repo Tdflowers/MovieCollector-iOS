@@ -85,14 +85,15 @@ class MovieDetailViewController: UIViewController {
         return label
     }()
     
-    var listUpdateButton:UIButton = {
-        let button = UIButton.init(type: UIButton.ButtonType.roundedRect)
-        button.setTitle("Add to Watched", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isUserInteractionEnabled = true
-        button.addTarget(self, action: #selector(addRemoveFromWatchList), for: .touchUpInside)
-
-        return button
+    var listControlSegmentedControl:UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["❌","👀","🎥"])
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.tintColor = .systemBlue
+        segmentedControl.backgroundColor = .secondarySystemBackground
+        segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
+        
+        return segmentedControl
     }()
 
     override func viewDidLoad() {
@@ -130,6 +131,7 @@ class MovieDetailViewController: UIViewController {
         self.view.addSubview(runtimeLabel)
         self.view.addSubview(directorLabel)
         self.view.addSubview(ratingLabel)
+        self.view.addSubview(listControlSegmentedControl)
         
         let overviewLabelTapGesture = UITapGestureRecognizer.init(target: self, action: #selector(overviewLabelTapped))
         overviewLabelTapGesture.numberOfTapsRequired = 1
@@ -142,9 +144,7 @@ class MovieDetailViewController: UIViewController {
         
         self.view.addSubview(posterImageView)
         loadPoster()
-        
-        self.view.addSubview(listUpdateButton)
-        
+                
         layoutConstraints()
         
         guard let userID = Auth.auth().currentUser?.uid else { return }
@@ -156,7 +156,20 @@ class MovieDetailViewController: UIViewController {
                 if doc.exists {
                     if let data = doc.data() {
                         if let _ = data[movieId] as? NSDictionary {
-                            self.listUpdateButton.setTitle("Remove From Watched", for: .normal)
+                            self.listControlSegmentedControl.selectedSegmentIndex = 2
+                        }
+                    }
+                }
+            }
+        }
+        
+        let messageRef2 = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("towatch")
+        messageRef2.getDocument { doc, error in
+            if let doc = doc {
+                if doc.exists {
+                    if let data = doc.data() {
+                        if let _ = data[movieId] as? NSDictionary {
+                            self.listControlSegmentedControl.selectedSegmentIndex = 1
                         }
                     }
                 }
@@ -220,31 +233,108 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    @objc func addRemoveFromWatchList () {
-        //Add movie to list or remove if already added. Add basic details so details are only pulled per movie.
+    @objc func segmentedValueChanged(_ sender:UISegmentedControl!) {
+        print("Selected Segment Index is : \(sender.selectedSegmentIndex)")
         
         guard let userID = Auth.auth().currentUser?.uid else { return }
         
         let movieId:String = String(movie.id!)
         
-        let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
-        messageRef.getDocument { doc, error in
-            if let doc = doc {
-                if doc.exists {
-                    if let data = doc.data() {
-                        if let _ = data[movieId] as? NSDictionary {
-                            messageRef.updateData([movieId: FieldValue.delete()])
-                            self.listUpdateButton.setTitle("Add to Watched", for: .normal)
+        
+        
+        if sender.selectedSegmentIndex == 0 {
+            //Not on list -- Remove From Watched and To Watch
+            let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
+            messageRef.getDocument { doc, error in
+                if let doc = doc {
+                    if doc.exists {
+                        if let data = doc.data() {
+                            if let _ = data[movieId] as? NSDictionary {
+                                messageRef.updateData([movieId: FieldValue.delete()])
 
-                        } else {
-                            messageRef.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
-                            self.listUpdateButton.setTitle("Remove from Watched", for: .normal)
+                            }
                         }
                     }
-                } else {
-                    messageRef.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
-                    self.listUpdateButton.setTitle("Remove From Watched", for: .normal)
+                }
+            }
+            
+            let messageRef2 = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("towatch")
+            messageRef2.getDocument { doc, error in
+                if let doc = doc {
+                    if doc.exists {
+                        if let data = doc.data() {
+                            if let _ = data[movieId] as? NSDictionary {
+                                messageRef2.updateData([movieId: FieldValue.delete()])
 
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } else if sender.selectedSegmentIndex == 1 {
+            //Want to Watch -- Remove from Watched
+            let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
+            messageRef.getDocument { doc, error in
+                if let doc = doc {
+                    if doc.exists {
+                        if let data = doc.data() {
+                            if let _ = data[movieId] as? NSDictionary {
+                                messageRef.updateData([movieId: FieldValue.delete()])
+
+                            }
+                        }
+                    }
+                }
+            }
+            
+            let messageRef2 = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("towatch")
+            messageRef2.getDocument { doc, error in
+                if let doc = doc {
+                    if doc.exists {
+                        if let data = doc.data() {
+                            if let _ = data[movieId] as? NSDictionary {
+
+                            } else {
+                                messageRef2.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                            }
+                        }
+                    } else {
+                        messageRef2.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                    }
+                }
+            }
+            
+        } else if sender.selectedSegmentIndex == 2 {
+            //Watched -- Remove from To Watch
+            let messageRef = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("towatch")
+            messageRef.getDocument { doc, error in
+                if let doc = doc {
+                    if doc.exists {
+                        if let data = doc.data() {
+                            if let _ = data[movieId] as? NSDictionary {
+                                messageRef.updateData([movieId: FieldValue.delete()])
+
+                            }
+                        }
+                    }
+                }
+            }
+            
+            let messageRef2 = Firestore.firestore().collection("lists").document(userID).collection("movielists").document("watched")
+            messageRef2.getDocument { doc, error in
+                if let doc = doc {
+                    if doc.exists {
+                        if let data = doc.data() {
+                            if let _ = data[movieId] as? NSDictionary {
+
+                            } else {
+                                messageRef2.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                            }
+                        }
+                    } else {
+                        messageRef2.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                    }
                 }
             }
         }
@@ -280,14 +370,7 @@ class MovieDetailViewController: UIViewController {
         layoutConstraint2.isActive = true
         
         NSLayoutConstraint.activate([
-            listUpdateButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
-            listUpdateButton.heightAnchor.constraint(equalToConstant: 25),
-            listUpdateButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/3),
-            listUpdateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: listUpdateButton.bottomAnchor, constant: 15),
+            titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15),
             titleLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/2)
         ])
         
@@ -329,11 +412,19 @@ class MovieDetailViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            overviewLabel.topAnchor.constraint(greaterThanOrEqualTo: directorLabel.bottomAnchor, constant: 15),
+            listControlSegmentedControl.topAnchor.constraint(equalTo: directorLabel.bottomAnchor, constant: 15),
+            listControlSegmentedControl.widthAnchor.constraint(equalTo: titleLabel.widthAnchor),
+            listControlSegmentedControl.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            overviewLabel.topAnchor.constraint(greaterThanOrEqualTo: listControlSegmentedControl.bottomAnchor, constant: 15),
             overviewLabel.topAnchor.constraint(greaterThanOrEqualTo: posterImageView.bottomAnchor, constant: 15),
             overviewLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85),
             overviewLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
+        
+        
     }
     
 }

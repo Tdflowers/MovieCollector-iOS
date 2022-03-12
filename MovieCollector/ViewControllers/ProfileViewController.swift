@@ -153,7 +153,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
                     tempArray = []
                     for (_, value) in data {
                         if let movie = value as? Dictionary<String, Any> {
-                            tempArray.append(Movie.init(id: movie["movieDbId"] as! Int64, title: movie["title"] as! String, overview: nil, posterPath: movie["posterUrl"] as! String, releaseDate: nil, adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
+                            tempArray.append(Movie.init(id: movie["movieDbId"] as? Int64, title: movie["title"] as? String, overview: nil, posterPath: movie["posterUrl"] as? String, releaseDate: nil, adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
                         }
                     }
                     self.watchedMoviesData = tempArray

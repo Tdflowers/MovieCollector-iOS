@@ -46,7 +46,7 @@ class APIConnect: NSObject {
         var urlComponents = URLComponents(string: urlString)
         urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "region", value: region)]
         let request = URLRequest(url: urlComponents!.url!)
-        
+        print(request)
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
