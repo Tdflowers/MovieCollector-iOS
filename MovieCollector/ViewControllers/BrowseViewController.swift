@@ -252,6 +252,10 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
     
+    func posterWasTappedWithTVSeries(_ series: TVSeries) {
+        print{"tv series was tapped"}
+    }
+    
     @objc func featuredViewWasTapped() {
         let newViewController = MovieDetailViewController()
         newViewController.movie = featuredView.movie

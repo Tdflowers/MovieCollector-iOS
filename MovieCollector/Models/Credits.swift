@@ -14,7 +14,7 @@ struct Credits {
     let crew: [Crew]?
 }
 
-extension Credits: Decodable {
+extension Credits: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, cast, crew

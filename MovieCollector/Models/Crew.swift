@@ -22,7 +22,7 @@ struct Crew {
     
 }
 
-extension Crew: Decodable {
+extension Crew: Codable {
 
     enum CodingKeys: String, CodingKey {
         case adult, gender, id, name, popularity, department, job

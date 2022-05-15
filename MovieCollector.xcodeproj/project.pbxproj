@@ -42,6 +42,8 @@
 		84BD863226E3652400D49672 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 84BD863126E3652400D49672 /* FirebaseAuth */; };
 		84BD863426E3652400D49672 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 84BD863326E3652400D49672 /* FirebaseDatabase */; };
 		84BD863626E3652400D49672 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 84BD863526E3652400D49672 /* FirebaseFirestore */; };
+		84E0683D282F79BC00350A7C /* TV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E0683C282F79BC00350A7C /* TV.swift */; };
+		84E06843282F86A500350A7C /* Production.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E06842282F86A500350A7C /* Production.swift */; };
 		84E2E1BA259C4A4C00441A1E /* MoreDetailTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E2E1B9259C4A4C00441A1E /* MoreDetailTextViewController.swift */; };
 		84FF06B225A1527600378690 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FF06B125A1527600378690 /* SearchResults.swift */; };
 		84FF06B725A1546E00378690 /* SearchNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FF06B625A1546E00378690 /* SearchNavigationController.swift */; };
@@ -101,6 +103,8 @@
 		84AD3C8C2598576F00642DEC /* Crew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crew.swift; sourceTree = "<group>"; };
 		84BD862C26DEA5EB00D49672 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84BD862E26DEE2E100D49672 /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
+		84E0683C282F79BC00350A7C /* TV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TV.swift; sourceTree = "<group>"; };
+		84E06842282F86A500350A7C /* Production.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Production.swift; sourceTree = "<group>"; };
 		84E2E1B9259C4A4C00441A1E /* MoreDetailTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDetailTextViewController.swift; sourceTree = "<group>"; };
 		84FF06B125A1527600378690 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 		84FF06B625A1546E00378690 /* SearchNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationController.swift; sourceTree = "<group>"; };
@@ -236,6 +240,8 @@
 				84AD3C8C2598576F00642DEC /* Crew.swift */,
 				845BB6CC259854AC00BE84A9 /* Credits.swift */,
 				84993B3F2592B09A00EFD094 /* Movie.swift */,
+				84E0683C282F79BC00350A7C /* TV.swift */,
+				84E06842282F86A500350A7C /* Production.swift */,
 				84FF06B125A1527600378690 /* SearchResults.swift */,
 				84993B442592B09F00EFD094 /* PopularMovieResults.swift */,
 				8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */,
@@ -401,6 +407,7 @@
 				84993B292592A3A700EFD094 /* ProfileViewController.swift in Sources */,
 				84993B452592B09F00EFD094 /* PopularMovieResults.swift in Sources */,
 				84993B242592A39800EFD094 /* SearchViewController.swift in Sources */,
+				84E0683D282F79BC00350A7C /* TV.swift in Sources */,
 				847209F22599939600A32017 /* MovieDetailViewController.swift in Sources */,
 				845005342593DB2000ABEFA7 /* UpcomingMovies.swift in Sources */,
 				847209FA2599A0D500A32017 /* BrowseNavigationController.swift in Sources */,
@@ -411,6 +418,7 @@
 				84993B402592B09A00EFD094 /* Movie.swift in Sources */,
 				84993B332592A89F00EFD094 /* Secrets.swift in Sources */,
 				2F1052BC26ED512F00E8A74E /* ProfileNavigationController.swift in Sources */,
+				84E06843282F86A500350A7C /* Production.swift in Sources */,
 				84993B1C2592A1EF00EFD094 /* TabBarViewController.swift in Sources */,
 				84993AEA2592A0E600EFD094 /* BrowseViewController.swift in Sources */,
 				84BD862F26DEE2E100D49672 /* LoginFlow.swift in Sources */,

@@ -9,11 +9,20 @@ import UIKit
 
 protocol PosterIconCollectionViewDelegate {
     func posterWasTappedWithMovie(_ movie:Movie)
+    func posterWasTappedWithTVSeries(_ series:TVSeries)
 }
 
 class PosterIconCollectionView: UICollectionView {
     
     var moviesData:[Movie] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.reloadData()
+            }
+        }
+    }
+    
+    var tvSeriesData:[TVSeries] = [] {
         didSet {
             DispatchQueue.main.async {
                 self.reloadData()
@@ -27,6 +36,8 @@ class PosterIconCollectionView: UICollectionView {
     var searchQuery:String?
     var pageMax:Double?
     
+    var isMoviesData = true
+    
     var posterDelegate:PosterIconCollectionViewDelegate?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -36,27 +47,28 @@ class PosterIconCollectionView: UICollectionView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }
 
 extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return moviesData.count
+        
+        if isMoviesData {
+            return moviesData.count
+        } else {
+            return tvSeriesData.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PosterIconView
         cell.backgroundColor = .clear
         cell.shouldShowTitle = true
-        cell.updateMovieDetailsWith(movie: moviesData[indexPath.row])
+        if isMoviesData {
+            cell.updateMovieDetailsWith(movie: moviesData[indexPath.row])
+        } else {
+            cell.updateTvSeriesDetailsWith(tvSeries: tvSeriesData[indexPath.row])
+        }
         return cell
     }
     
@@ -76,14 +88,27 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if (indexPath.row == moviesData.count - 1 ) { //it's your last cell
+        
+        var resultsCount = 0
+        if isMoviesData {
+            resultsCount = moviesData.count
+        } else {
+            resultsCount = tvSeriesData.count
+        }
+        if (indexPath.row == resultsCount - 1 ) { //it's your last cell
             if let search = searchQuery {
                 currentPageNumber = currentPageNumber + 1
                 if let pageMaxInt = pageMax {
                     if Int(pageMaxInt) >= currentPageNumber {
                         let pageString = String(currentPageNumber)
-                        APIConnect.shared().getSearchResults(languge: "en-US", region: "US", query: search, page: pageString) { results in
-                            self.moviesData += results.movies
+                        if isMoviesData {
+                            APIConnect.shared().getMovieSearchResults(languge: "en-US", region: "US", query: search, page: pageString) { results in
+                                self.moviesData += results.movies
+                            }
+                        } else {
+                            APIConnect.shared().getTVSearchResults(languge: "en-US", query: search, page: pageString) { results in
+                                self.tvSeriesData += results.shows
+                            }
                         }
                     }
                 }
@@ -92,6 +117,10 @@ extension PosterIconCollectionView: UICollectionViewDelegateFlowLayout, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        posterDelegate?.posterWasTappedWithMovie(moviesData[indexPath.row])
+        if isMoviesData {
+            posterDelegate?.posterWasTappedWithMovie(moviesData[indexPath.row])
+        } else {
+            posterDelegate?.posterWasTappedWithTVSeries(tvSeriesData[indexPath.row])
+        }
     }
 }

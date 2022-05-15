@@ -81,6 +81,33 @@ class PosterIconView : UICollectionViewCell {
         }
     }
     
+    func updateTvSeriesDetailsWith(tvSeries:TVSeries) {
+        
+        DispatchQueue.main.async {
+            if self.shouldShowTitle {
+                self.titleLabel.text = tvSeries.name
+            }
+            
+            if let poster = tvSeries.posterPath {
+                let urlString = APIIMAGEBASEURL + "w300" + poster
+                let urlComponents = URLComponents(string: urlString)
+                if let url = urlComponents!.url {
+                    let imageRequest = ImageRequest.init(url: url)
+                    
+                    let options = ImageLoadingOptions(
+                        placeholder: UIImage(named: "placeholder poster"),
+                        transition: .fadeIn(duration: 0.3)
+                    )
+                    
+                    Nuke.loadImage(with: imageRequest,options: options, into: self.posterImageView)
+                }
+            } else {
+                self.posterImageView.image = UIImage(named: "placeholder poster")
+            }
+            self.setupLayout()
+        }
+    }
+    
     private func setupLayout() {
         
         self.removeConstraints(self.constraints)
@@ -96,11 +123,11 @@ class PosterIconView : UICollectionViewCell {
             ])
             
             NSLayoutConstraint.activate([
-                posterImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//                posterImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
                 posterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
                 posterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
                 posterImageView.topAnchor.constraint(equalTo: self.topAnchor),
-                posterImageView.heightAnchor.constraint(lessThanOrEqualTo: posterImageView.widthAnchor, multiplier: 3/2),
+                posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 3/2),
                 
             ])
             

@@ -24,7 +24,7 @@ struct Cast {
     
 }
 
-extension Cast: Decodable {
+extension Cast: Codable {
 
     enum CodingKeys: String, CodingKey {
         case adult, gender, id, name, popularity, character, order

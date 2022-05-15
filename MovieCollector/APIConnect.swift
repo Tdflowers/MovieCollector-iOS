@@ -126,7 +126,7 @@ class APIConnect: NSObject {
         task.resume()
     }
     
-    func getSearchResults(languge: String, region: String, query: String, page: String,completion: @escaping (MovieSearchResults) -> ()) {
+    func getMovieSearchResults(languge: String, region: String, query: String, page: String,completion: @escaping (MovieSearchResults) -> ()) {
         
         let urlString = APIBASEURL + "/search/movie"
         
@@ -214,5 +214,94 @@ class APIConnect: NSObject {
         task.resume()
     }
  
+    //MARK: -- TV API Calls
+    
+    func getTVSearchResults(languge: String, query: String, page: String,completion: @escaping (TVSearchResults) -> ()) {
+        
+        let urlString = APIBASEURL + "/search/tv"
+        
+        var urlComponents = URLComponents(string: urlString)
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY), URLQueryItem(name: "languge", value: languge), URLQueryItem(name: "page", value: page), URLQueryItem(name: "query", value: query)]
+        let request = URLRequest(url: urlComponents!.url!)
+        
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                return
+            }
+            
+            if let data = responseData, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    let tvSearchResults = try JSONDecoder().decode(TVSearchResults.self, from: data)
+                    completion(tvSearchResults)
+                } catch let error {
+                    print(error as Any)
+                }
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
+    
+    func getTVSeriesDetailsFor(show: Int64, completion: @escaping (TVSeries) -> ()) {
+        let showString = String(show)
+        let urlString = APIBASEURL + "/tv/" + showString
+        
+        var urlComponents = URLComponents(string: urlString)
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
+        let request = URLRequest(url: urlComponents!.url!)
+        
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                return
+            }
+            
+            if let data = responseData, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    let tvSeriesResults = try JSONDecoder().decode(TVSeries.self, from: data)
+                    completion(tvSeriesResults)
+                } catch let error {
+                    print(error as Any)
+                }
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
+    
+    func getTVSeriesSeasonDetailsFor(show: Int64, season: Int64, completion: @escaping (TVSeason) -> ()) {
+        let showString = String(show)
+        let seasonString = String(season)
+        let urlString = APIBASEURL + "/tv/" + showString + "/season/" + seasonString
+        
+        var urlComponents = URLComponents(string: urlString)
+        urlComponents?.queryItems = [URLQueryItem(name: "api_key", value: APIKEY)]
+        let request = URLRequest(url: urlComponents!.url!)
+        
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                return
+            }
+            
+            if let data = responseData, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    let tvSeriesResults = try JSONDecoder().decode(TVSeason.self, from: data)
+                    completion(tvSeriesResults)
+                } catch let error {
+                    print(error as Any)
+                }
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
  
 }

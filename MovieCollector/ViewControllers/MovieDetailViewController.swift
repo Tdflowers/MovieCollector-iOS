@@ -91,8 +91,6 @@ class MovieDetailViewController: UIViewController {
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.tintColor = .systemBlue
         segmentedControl.backgroundColor = .secondarySystemBackground
-        segmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
-        
         return segmentedControl
     }()
 
@@ -133,6 +131,8 @@ class MovieDetailViewController: UIViewController {
         self.view.addSubview(ratingLabel)
         self.view.addSubview(listControlSegmentedControl)
         
+        listControlSegmentedControl.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
+        
         let overviewLabelTapGesture = UITapGestureRecognizer.init(target: self, action: #selector(overviewLabelTapped))
         overviewLabelTapGesture.numberOfTapsRequired = 1
         overviewLabel.addGestureRecognizer(overviewLabelTapGesture)
@@ -157,6 +157,8 @@ class MovieDetailViewController: UIViewController {
                     if let data = doc.data() {
                         if let _ = data[movieId] as? NSDictionary {
                             self.listControlSegmentedControl.selectedSegmentIndex = 2
+                            
+                            return
                         }
                     }
                 }
@@ -170,6 +172,8 @@ class MovieDetailViewController: UIViewController {
                     if let data = doc.data() {
                         if let _ = data[movieId] as? NSDictionary {
                             self.listControlSegmentedControl.selectedSegmentIndex = 1
+                            
+                            return
                         }
                     }
                 }
@@ -234,13 +238,10 @@ class MovieDetailViewController: UIViewController {
     }
     
     @objc func segmentedValueChanged(_ sender:UISegmentedControl!) {
-        print("Selected Segment Index is : \(sender.selectedSegmentIndex)")
         
         guard let userID = Auth.auth().currentUser?.uid else { return }
         
         let movieId:String = String(movie.id!)
-        
-        
         
         if sender.selectedSegmentIndex == 0 {
             //Not on list -- Remove From Watched and To Watch
@@ -296,11 +297,11 @@ class MovieDetailViewController: UIViewController {
                             if let _ = data[movieId] as? NSDictionary {
 
                             } else {
-                                messageRef2.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                                messageRef2.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!, "releaseYear" : self.movie.releaseDate!]])
                             }
                         }
                     } else {
-                        messageRef2.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                        messageRef2.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!, "releaseYear" : self.movie.releaseDate!]])
                     }
                 }
             }
@@ -329,11 +330,11 @@ class MovieDetailViewController: UIViewController {
                             if let _ = data[movieId] as? NSDictionary {
 
                             } else {
-                                messageRef2.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                                messageRef2.updateData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!, "releaseYear" : self.movie.releaseDate!]])
                             }
                         }
                     } else {
-                        messageRef2.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!]])
+                        messageRef2.setData([movieId: ["title": self.movie.title!, "runtime" : self.movie.runtime!, "movieDbId" : self.movie.id!, "posterUrl" : self.movie.posterPath!, "releaseYear" : self.movie.releaseDate!]])
                     }
                 }
             }
