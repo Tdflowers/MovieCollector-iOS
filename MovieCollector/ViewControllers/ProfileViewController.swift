@@ -29,7 +29,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.systemGreen, for: .normal)
         button.backgroundColor = .systemBlue
-        button.addTarget(ProfileViewController.self, action: #selector(signUpPressed), for: .touchUpInside)
         return button
     }()
     
@@ -39,7 +38,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         button.setTitle("Sign Out", for: .normal)
         button.setTitleColor(.systemGreen, for: .normal)
         button.backgroundColor = .systemRed
-        button.addTarget(ProfileViewController.self, action: #selector(signOutPressed), for: .touchUpInside)
         return button
     }()
     
@@ -80,6 +78,9 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         handle = Auth.auth().addStateDidChangeListener { auth, user in
           
         }
+        
+        signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
+        signOutButton.addTarget(self, action: #selector(signOutPressed), for: .touchUpInside)
         
     }
     

@@ -194,11 +194,14 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
             for seasonNumber in (1...Int64(results.numberOfSeasons!)) {
                 APIConnect.shared().getTVSeriesSeasonDetailsFor(show: series.id!, season: seasonNumber) { seriesResults in
                     for episode in seriesResults.episodes! {
-                        totalRuntime += episode.runtime!
+                        if let runtime = episode.runtime {
+                            totalRuntime += runtime
+                        }
                     }
                 }
             }
         })
+        
         
         let alert = UIAlertController(title: nil, message: "Calculating Length...", preferredStyle: .alert)
 
@@ -212,17 +215,27 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.dismissAlert()
+
+            if totalRuntime == 0 {
+                
+                let alert = UIAlertController(title: series.name, message: "Sorry, this show doesn't have exact runtimes yet", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
+                    
+                }))
+                self.present(alert, animated: true, completion: nil)
+                
+                return
+            }
+            
             let days = String((totalRuntime / 1440)) + " days "
             let hours = String((totalRuntime % 1440) / 60) + " hours "
             let minutes = String(totalRuntime % 60) + " minutes"
             
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: series.name, message: "Would take " + days + hours + minutes + " to watch", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
-                    //Cancel Action
-                }))
-                self.present(alert, animated: true, completion: nil)
-            }
+            let alert = UIAlertController(title: series.name, message: "Would take " + days + hours + minutes + " to watch", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
+                //Cancel Action
+            }))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
