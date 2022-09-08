@@ -123,11 +123,15 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     
     @objc func signUpPressed () {
         //Popup signup / signin flow
-        let hostingController = UIHostingController(rootView: LoginFlow())
-           hostingController.rootView.dismiss = {
-               hostingController.dismiss(animated: true, completion: nil)
-           }
-           present(hostingController, animated: true, completion: nil)
+//        let hostingController = UIHostingController(rootView: LoginFlow())
+//           hostingController.rootView.dismiss = {
+//               hostingController.dismiss(animated: true, completion: nil)
+//           }
+//           present(hostingController, animated: true, completion: nil)
+        
+        let loginVC = LoginViewController()
+        self.modalPresentationStyle = .overCurrentContext
+        self.present(loginVC, animated: true)
 
     }
     

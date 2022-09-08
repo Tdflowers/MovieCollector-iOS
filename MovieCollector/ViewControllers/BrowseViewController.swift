@@ -253,7 +253,7 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
     }
     
     func posterWasTappedWithTVSeries(_ series: TVSeries) {
-        print{"tv series was tapped"}
+        print("tv series was tapped")
     }
     
     @objc func featuredViewWasTapped() {
