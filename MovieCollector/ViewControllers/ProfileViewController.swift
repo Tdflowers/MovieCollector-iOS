@@ -24,11 +24,24 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     }
     
     var signUpButton:UIButton = {
-        let button = UIButton.init(type: .roundedRect)
+        let button = UIButton.init(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Sign Up", for: .normal)
-        button.setTitleColor(.systemGreen, for: .normal)
-        button.backgroundColor = .systemBlue
+        
+        var config = UIButton.Configuration.filled()
+        config.title = "Sign Up"
+        config.background.backgroundColor = .systemBackground
+        config.background.strokeColor = .label
+        config.background.strokeWidth = 1
+        config.baseForegroundColor = .label
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            // 1
+            var outgoing = incoming
+            // 2
+            outgoing.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+            // 3
+            return outgoing
+          }
+        button.configuration = config
         return button
     }()
     
@@ -92,13 +105,14 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
 //            updatedWatchedMoviesData()
             watchedMoviesCollectionView.posterDelegate = self
         } else {
-            view.addSubview(signUpButton)
+//            view.addSubview(signUpButton)
+            signUpPressed()
         }
         
     }
     
     func layoutConstraints () {
-        if signUpButton.isDescendant(of: view) {
+        if signUpButton.isDescendant(of: self.view) {
             NSLayoutConstraint.activate([
                 signUpButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/8),
                 signUpButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),

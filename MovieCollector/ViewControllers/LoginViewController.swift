@@ -167,39 +167,54 @@ class LoginViewController: UIViewController {
     
     @objc func switchAccountTypePressed() {
         //Switch to login if on sign up or reverse
+        var accountConfig = self.switchAccountType.configuration
+        var signAppleConfig = self.signUpWithAppleButton.configuration
+        var loginEmailConfig = self.signUpWithEmailButton.configuration
+        
+        var titleText:String = ""
+        var subtitleText:String = ""
+
         if isInSignupMode {
             isInSignupMode = false
-            var accountConfig = self.switchAccountType.configuration
             accountConfig?.title = "Don’t have an account? Sign Up"
-            self.switchAccountType.configuration = accountConfig
-            
-            var signAppleConfig = self.signUpWithAppleButton.configuration
             signAppleConfig?.title = "Login With Apple"
-            self.signUpWithAppleButton.configuration = signAppleConfig
-            
-            var loginEmailConfig = self.signUpWithEmailButton.configuration
             loginEmailConfig?.title = "Login with Email"
-            self.signUpWithEmailButton.configuration = loginEmailConfig
             
-            self.titleLabel.text = "Sign Into MovieCollector"
-            self.subTitleLabel.text = "Add movies, update your profile, and more"
+            titleText = "Sign Into MovieCollector"
+            subtitleText = "Add movies, update your profile, and more"
         } else {
             isInSignupMode = true
-            var accountConfig = self.switchAccountType.configuration
             accountConfig?.title = "Already have an account? Login"
-            self.switchAccountType.configuration = accountConfig
-            
-            var signAppleConfig = self.signUpWithAppleButton.configuration
             signAppleConfig?.title = "Signup With Apple"
-            self.signUpWithAppleButton.configuration = signAppleConfig
-            
-            var loginEmailConfig = self.signUpWithEmailButton.configuration
             loginEmailConfig?.title = "Signup with Email"
-            self.signUpWithEmailButton.configuration = loginEmailConfig
             
-            self.titleLabel.text = "Sign Up for Movie Collector"
-            self.subTitleLabel.text = "Create a profile to save your movies and tv shows"
+            titleText = "Sign Up for Movie Collector"
+            subtitleText = "Create a profile to save your movies and tv shows"
         }
+        let animation:CATransition = CATransition()
+        animation.timingFunction = CAMediaTimingFunction(name:
+            CAMediaTimingFunctionName.easeInEaseOut)
+        animation.type = CATransitionType.fade
+        animation.subtype = CATransitionSubtype.fromTop
+        self.titleLabel.text = titleText
+        self.subTitleLabel.text = subtitleText
+        self.switchAccountType.configuration = accountConfig
+        self.signUpWithAppleButton.configuration = signAppleConfig
+        self.signUpWithEmailButton.configuration = loginEmailConfig
+        animation.duration = 0.35
+        self.titleLabel.layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        self.subTitleLabel.layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        self.signUpWithAppleButton.layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        self.switchAccountType.layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        self.signUpWithEmailButton.layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        
+//        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseIn) {
+//            self.switchAccountType.configuration = accountConfig
+//            self.signUpWithAppleButton.configuration = signAppleConfig
+//            self.signUpWithEmailButton.configuration = loginEmailConfig
+//            self.titleLabel.text = titleText
+//            self.subTitleLabel.text = subtitleText
+//        }
     }
     
 
