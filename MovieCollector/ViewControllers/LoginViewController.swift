@@ -17,6 +17,7 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         self.view.backgroundColor = .systemBackground
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         setupViews()
         setupAutolayout()
@@ -151,7 +152,7 @@ class LoginViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             closeButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 15),
-            closeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15)
+            closeButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15)
             ])
     }
     
@@ -161,6 +162,13 @@ class LoginViewController: UIViewController {
             //Apple Button Pressed
         } else if sender.tag == 1 {
             //Email Button Pressed
+            if isInSignupMode {
+                let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Name, TFInputFieldType.Username])
+                self.navigationController?.pushViewController(signupvc, animated: true)
+            } else {
+                let signupvc = SignUpFieldsViewController(title: "Login", fields: [TFInputFieldType.Email, TFInputFieldType.Password])
+                self.navigationController?.pushViewController(signupvc, animated: true)
+            }
         }
         
     }
@@ -207,14 +215,6 @@ class LoginViewController: UIViewController {
         self.signUpWithAppleButton.layer.add(animation, forKey: CATransitionType.fade.rawValue)
         self.switchAccountType.layer.add(animation, forKey: CATransitionType.fade.rawValue)
         self.signUpWithEmailButton.layer.add(animation, forKey: CATransitionType.fade.rawValue)
-        
-//        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseIn) {
-//            self.switchAccountType.configuration = accountConfig
-//            self.signUpWithAppleButton.configuration = signAppleConfig
-//            self.signUpWithEmailButton.configuration = loginEmailConfig
-//            self.titleLabel.text = titleText
-//            self.subTitleLabel.text = subtitleText
-//        }
     }
     
 

@@ -143,7 +143,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
 //           }
 //           present(hostingController, animated: true, completion: nil)
         
-        let loginVC = LoginViewController()
+        let loginVC = SignUpFlowNavController()
         self.modalPresentationStyle = .overCurrentContext
         self.present(loginVC, animated: true)
 
