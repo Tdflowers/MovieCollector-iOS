@@ -163,10 +163,10 @@ class LoginViewController: UIViewController {
         } else if sender.tag == 1 {
             //Email Button Pressed
             if isInSignupMode {
-                let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Name, TFInputFieldType.Username])
+                let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Name, TFInputFieldType.Username], signupType: .SignUpPage1)
                 self.navigationController?.pushViewController(signupvc, animated: true)
             } else {
-                let signupvc = SignUpFieldsViewController(title: "Login", fields: [TFInputFieldType.Email, TFInputFieldType.Password])
+                let signupvc = SignUpFieldsViewController(title: "Login", fields: [TFInputFieldType.Email, TFInputFieldType.Password], signupType: .Login)
                 self.navigationController?.pushViewController(signupvc, animated: true)
             }
         }

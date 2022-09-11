@@ -26,7 +26,7 @@ class TFInputField: UIView {
     */
     
     var titleLabel:UILabel!
-    var textField:UITextField!
+    public var textField:UITextField!
     var subtitleLabel:UILabel!
     
     var title:String = ""
@@ -80,20 +80,24 @@ class TFInputField: UIView {
             subtitleLabel.text = ""
         case .Password:
             titleLabel.text = "Password"
-//            textField.placeholder = "John Smith"
+            textField.placeholder = "••••••••••"
 //            subtitleLabel.text = ""
         case .ConfirmPassword:
             titleLabel.text = "Confirm Password"
-//            textField.placeholder = "John Smith"
+            textField.placeholder = "••••••••••"
 //            subtitleLabel.text = ""
         case .Email:
             titleLabel.text = "Email"
             textField.placeholder = "john@applesmith.com"
 //            subtitleLabel.text = ""
+            textField.autocorrectionType = .no
+            textField.autocapitalizationType = .none
         case .Username:
             titleLabel.text = "Username"
             textField.placeholder = "@johnapple"
             subtitleLabel.text = "You’ll use the username to share your profile and find your friends!"
+            textField.autocorrectionType = .no
+            textField.autocapitalizationType = .none
         case .none:
             titleLabel.text = "We broke what"
         }

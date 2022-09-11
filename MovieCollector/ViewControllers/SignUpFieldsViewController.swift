@@ -6,14 +6,23 @@
 //
 
 import UIKit
+import FirebaseAuth
+
+enum SignUpPageType {
+    case SignUpPage1
+    case SignUpPage2
+    case Login
+    case SignupApple
+}
 
 class SignUpFieldsViewController: UIViewController {
     
     var signUpTitle: String
     var fields: [TFInputFieldType] = []
+    var signuptype:SignUpPageType
 
     var fieldsStackView:UIStackView!
-    
+    var tfFields: [TFInputField] = []
     var closeButton:UIButton!
     
     var titleLabel: UILabel = {
@@ -52,9 +61,10 @@ class SignUpFieldsViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    init(title: String, fields:[TFInputFieldType]) {
+    init(title: String, fields:[TFInputFieldType], signupType:SignUpPageType) {
         self.signUpTitle = title
         self.fields = fields
+        self.signuptype = signupType
         
         super.init(nibName: nil, bundle: nil)
         
@@ -71,9 +81,7 @@ class SignUpFieldsViewController: UIViewController {
         titleLabel.text = title
         
         nextButton.addTarget(self, action: #selector(continuePressed), for: .touchUpInside)
-        
-        var tfFields: [TFInputField] = []
-        
+                
         for field in fields {
             let tfField = TFInputField(type: field)
             tfFields.append(tfField)
@@ -107,11 +115,49 @@ class SignUpFieldsViewController: UIViewController {
         NSLayoutConstraint(item: nextButton, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: -10).isActive = true
         NSLayoutConstraint(item: nextButton, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.75, constant: 0).isActive = true
         NSLayoutConstraint(item: nextButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-
+        
+        var buttonConfig = nextButton.configuration
+        
+        switch signuptype {
+        case .SignUpPage1:
+            buttonConfig?.title = "Continue"
+        case .SignUpPage2:
+            buttonConfig?.title = "Finish"
+        case .Login:
+            buttonConfig?.title = "Login"
+        case .SignupApple:
+            buttonConfig?.title = "Finish"
+        }
+        nextButton.configuration = buttonConfig
         
     }
     
     @objc func continuePressed() {
+        
+        switch signuptype {
+            case .SignUpPage1:
+            let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Email, TFInputFieldType.Password, TFInputFieldType.ConfirmPassword], signupType: .SignUpPage2)
+                self.navigationController?.pushViewController(signupvc, animated: true)
+            case .SignUpPage2:
+                print("Signup Page 2 Finished")
+                self.dismiss(animated: true)
+            case .Login:
+                print("Login Pressed")
+            if tfFields[0].textField.text != nil && tfFields[1].textField.text != nil && tfFields[0].textField.text != "" && tfFields[1].textField.text != "" {
+                Auth.auth().signIn(withEmail: tfFields[0].textField.text ?? "", password: tfFields[1].textField.text ?? "") {
+                    authResult, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+    //                    errorString = "Signup error: " + error.localizedDescription
+                        return
+                    } else {
+                        self.dismiss(animated: true)
+                    }
+                }
+            }
+            case .SignupApple:
+                print("Sign Up with Apple Completed")
+        }
         
     }
     

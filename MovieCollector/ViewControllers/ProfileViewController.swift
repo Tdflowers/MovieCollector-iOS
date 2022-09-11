@@ -12,7 +12,8 @@ import FirebaseFirestore
 
 class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate {
     
-    var messageRef:DocumentReference?
+    var watchedMovieRef:DocumentReference?
+    var towatchMovieRef:DocumentReference?
     var listListener:ListenerRegistration?
     var userId:String?
     
@@ -20,6 +21,12 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         didSet {
             //Did get now playing movies
             updatedWatchedMoviesView()
+        }
+    }
+    
+    var towatchMoviesData:[Movie] = [] {
+        didSet {
+            updatedtowatchMoviesView()
         }
     }
     
@@ -68,6 +75,21 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return view
     }()
+    var towatchMoviesCollectionView:PosterIconCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        
+        let view = PosterIconCollectionView.init(frame: .zero, collectionViewLayout: layout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.dataSource = view
+        view.delegate = view
+        view.allowsSelection = true
+        view.register(PosterIconView.self, forCellWithReuseIdentifier: "cell")
+        view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return view
+    }()
+
     
     var handle: AuthStateDidChangeListenerHandle?
 
@@ -79,17 +101,24 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         
         if Auth.auth().currentUser != nil {
             view.addSubview(watchedMoviesCollectionView)
+            view.addSubview(towatchMoviesCollectionView)
             view.addSubview(signOutButton)
             userId = Auth.auth().currentUser?.uid
-            messageRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
-            updatedWatchedMoviesData()
+            watchedMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
+            towatchMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("towatch")
+            updateMoviesData(ref: self.watchedMovieRef!, completion: { array in
+                self.watchedMoviesData = array
+            })
+            updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
+                self.towatchMoviesData = array
+            })
         } else {
             view.addSubview(signUpButton)
         }
         layoutConstraints()
         
         handle = Auth.auth().addStateDidChangeListener { auth, user in
-          
+            self.refreshProfile()
         }
         
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
@@ -101,17 +130,18 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         super.viewDidAppear(animated)
         
         if Auth.auth().currentUser != nil {
-            signUpButton.isHidden = true
+//            signUpButton.isHidden = true
 //            updatedWatchedMoviesData()
             watchedMoviesCollectionView.posterDelegate = self
+            towatchMoviesCollectionView.posterDelegate = self
         } else {
-//            view.addSubview(signUpButton)
             signUpPressed()
         }
         
     }
     
     func layoutConstraints () {
+        
         if signUpButton.isDescendant(of: self.view) {
             NSLayoutConstraint.activate([
                 signUpButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/8),
@@ -123,8 +153,14 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             NSLayoutConstraint.activate([
                 watchedMoviesCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
                 watchedMoviesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1),
-                watchedMoviesCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                watchedMoviesCollectionView.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 20),
                 watchedMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            ])
+            NSLayoutConstraint.activate([
+                towatchMoviesCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
+                towatchMoviesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1),
+                towatchMoviesCollectionView.topAnchor.constraint(equalTo: watchedMoviesCollectionView.bottomAnchor, constant: 10),
+                towatchMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
             NSLayoutConstraint.activate([
                 signOutButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/12),
@@ -133,6 +169,35 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
                 signOutButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3)
             ])
         }
+    }
+    
+    func refreshProfile() {
+        if Auth.auth().currentUser != nil {
+            self.view.addSubview(self.watchedMoviesCollectionView)
+            self.view.addSubview(self.towatchMoviesCollectionView)
+            self.view.addSubview(self.signOutButton)
+            self.userId = Auth.auth().currentUser?.uid
+            self.towatchMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("towatch")
+            self.watchedMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("watched")
+            updateMoviesData(ref: self.watchedMovieRef!, completion: { array in
+                self.watchedMoviesData = array
+            })
+            updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
+                self.towatchMoviesData = array
+            })
+            self.signUpButton.removeFromSuperview()
+        } else {
+            self.userId = nil
+            self.watchedMovieRef = nil
+            self.towatchMovieRef = nil
+            self.view.addSubview(self.signUpButton)
+            self.watchedMoviesCollectionView.removeFromSuperview()
+            self.towatchMoviesCollectionView.removeFromSuperview()
+            self.signOutButton.removeFromSuperview()
+            self.signUpButton.isHidden = false
+        }
+        
+        self.layoutConstraints()
     }
     
     @objc func signUpPressed () {
@@ -157,35 +222,42 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         watchedMoviesCollectionView.moviesData = watchedMoviesData
     }
     
+    func updatedtowatchMoviesView() {
+        towatchMoviesCollectionView.moviesData = towatchMoviesData
+    }
+    
     func beginListeningForChangeInList () {
         
     }
     
-    func updatedWatchedMoviesData() {
+    func updateMoviesData(ref:DocumentReference, completion: @escaping ([Movie]) -> Void) {
         
-    var tempArray:[Movie] = []
+        var tempArray:[Movie] = []
     
-        listListener = messageRef!.addSnapshotListener { doc, error in
+        listListener = ref.addSnapshotListener { doc, error in
         if let doc = doc {
             if doc.exists {
                 if let data = doc.data() {
                     tempArray = []
                     for (_, value) in data {
                         if let movie = value as? Dictionary<String, Any> {
-                            tempArray.append(Movie.init(id: movie["movieDbId"] as? Int64, title: movie["title"] as? String, overview: nil, posterPath: movie["posterUrl"] as? String, releaseDate: movie["releaseYear"] as? String, adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
+                            tempArray.append(Movie.init(id: movie["movieDbId"] as? Int64, title: movie["title"] as? String, overview: nil, posterPath: movie["posterUrl"] as? String, releaseDate: movie["releaseYear"] as? String ?? "", adult: nil, genreIds: nil, popularity: nil, voteCount: nil, video: nil, voteAverage: nil, backdropPath: nil, originalTitle: nil, originalLanguage: nil, runtime: nil))
                         }
                     }
                     
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-
-                    let sortedArray = tempArray.sorted { dateFormatter.date(from: $0.releaseDate!)! < dateFormatter.date(from: $1.releaseDate!)! }
-                    self.watchedMoviesData = sortedArray.reversed()
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        let sortedArray = tempArray.sorted { dateFormatter.date(from: $0.releaseDate!) ?? Date.now < dateFormatter.date(from: $1.releaseDate!) ?? Date.now }
+//                        self.watchedMoviesData = sortedArray.reversed()
+                    completion(sortedArray.reversed())
+                    }
                 }
             }
         }
     }
-}
+    
+    
+    
     func posterWasTappedWithMovie(_ movie: Movie) {
         let newViewController = MovieDetailViewController()
         newViewController.movie = movie
