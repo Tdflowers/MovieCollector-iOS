@@ -7,12 +7,14 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 enum SignUpPageType {
     case SignUpPage1
     case SignUpPage2
     case Login
     case SignupApple
+    case ForgotPassword
 }
 
 class SignUpFieldsViewController: UIViewController {
@@ -24,6 +26,10 @@ class SignUpFieldsViewController: UIViewController {
     var fieldsStackView:UIStackView!
     var tfFields: [TFInputField] = []
     var closeButton:UIButton!
+    
+    var ref: Firestore!
+    
+    var continueButtonLayoutBottom:NSLayoutConstraint!
     
     var titleLabel: UILabel = {
         let label = UILabel.init(frame: .zero)
@@ -68,6 +74,8 @@ class SignUpFieldsViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
+        ref = Firestore.firestore()
+        
         self.view.backgroundColor = .systemBackground
         
         fieldsStackView = UIStackView(frame: .zero)
@@ -98,7 +106,7 @@ class SignUpFieldsViewController: UIViewController {
 
         let count = tfFields.count
         NSLayoutConstraint(item: fieldsStackView!, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: fieldsStackView!, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: fieldsStackView!, attribute: .centerY, relatedBy: .lessThanOrEqual, toItem: self.view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: fieldsStackView!, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.85, constant: 0).isActive = true
         NSLayoutConstraint(item: fieldsStackView!, attribute: .height, relatedBy: .lessThanOrEqual, toItem: tfFields[0], attribute: .height, multiplier: CGFloat(count), constant: 0).isActive = true
         NSLayoutConstraint(item: fieldsStackView!, attribute: .top, relatedBy: .greaterThanOrEqual, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
@@ -111,10 +119,12 @@ class SignUpFieldsViewController: UIViewController {
             closeButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 15)
             ])
         
-        NSLayoutConstraint(item: nextButton, attribute: .top, relatedBy: .greaterThanOrEqual, toItem: fieldsStackView, attribute: .bottom, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: nextButton, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: -10).isActive = true
+        NSLayoutConstraint(item: nextButton, attribute: .top, relatedBy: .greaterThanOrEqual, toItem: fieldsStackView, attribute: .bottom, multiplier: 1, constant: 50).isActive = true
+        continueButtonLayoutBottom = NSLayoutConstraint(item: nextButton, attribute: .bottom, relatedBy: .lessThanOrEqual, toItem: self.view.keyboardLayoutGuide, attribute: .top, multiplier: 1, constant: -10)
+        continueButtonLayoutBottom.isActive = true
         NSLayoutConstraint(item: nextButton, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 0.75, constant: 0).isActive = true
         NSLayoutConstraint(item: nextButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: nextButton, attribute: .height, relatedBy: .lessThanOrEqual, toItem: .none, attribute: .height, multiplier: 1, constant: 50).isActive = true
         
         var buttonConfig = nextButton.configuration
         
@@ -127,9 +137,20 @@ class SignUpFieldsViewController: UIViewController {
             buttonConfig?.title = "Login"
         case .SignupApple:
             buttonConfig?.title = "Finish"
+        case .ForgotPassword:
+            buttonConfig?.title = "Send Reset Email"
         }
         nextButton.configuration = buttonConfig
         
+        self.hideKeyboardWhenTappedAround()
+
+    }
+    
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
     
     @objc func continuePressed() {
@@ -139,8 +160,50 @@ class SignUpFieldsViewController: UIViewController {
             let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Email, TFInputFieldType.Password, TFInputFieldType.ConfirmPassword], signupType: .SignUpPage2)
                 self.navigationController?.pushViewController(signupvc, animated: true)
             case .SignUpPage2:
-                print("Signup Page 2 Finished")
-                self.dismiss(animated: true)
+            var fails = false
+            if !isValidEmail(self.tfFields[0].textField.text ?? "") {
+                self.tfFields[0].animateSubtitleText(red: true, with: "Invalid Email")
+                fails = true
+            } else {
+                self.tfFields[0].animateSubtitleText(red: false, with: "")
+            }
+            let passwordRegEx = NSPredicate(format: "SELF MATCHES %@ ", "^(?=.*[a-z])(?=.*[$@$#!%*?&])(?=.*[A-Z])(?=.*[0-9]).{8,}$")
+            if (!passwordRegEx.evaluate(with: tfFields[1].textField.text ?? "")) {
+                self.tfFields[1].animateSubtitleText(red: true, with: "Password Does Not Meet Requirements")
+                fails = true
+            } else {
+                self.tfFields[1].animateSubtitleText(red: false, with: "")
+            }
+            if (tfFields[1].textField.text != tfFields[2].textField.text && tfFields[1].textField.text != "") {
+                self.tfFields[2].animateSubtitleText(red: true, with: "Passwords do not match")
+                fails = true
+            } else {
+                self.tfFields[2].animateSubtitleText(red: false, with: "")
+            }
+            if fails { return }
+            if let navController = self.navigationController, navController.viewControllers.count >= 2 {
+                Auth.auth().createUser(withEmail: tfFields[0].textField.text ?? "", password: tfFields[1].textField.text ?? "") { authResult, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+//                        errorString = "Signup error: " + error.localizedDescription
+                        self.tfFields[0].animateSubtitleText(red: true, with: error.localizedDescription)
+                        return
+                    } else {
+                        if let authResult = authResult {
+                                if let viewController = navController.viewControllers[navController.viewControllers.count - 2] as? SignUpFieldsViewController {
+                                    self.ref.collection("users").document(authResult.user.uid).setData(["name":viewController.tfFields[0].textField.text ?? "", "username":viewController.tfFields[1].textField.text ?? ""]) { err in
+                                        if let err = err {
+                                            print("Error writing document: \(err)")
+                                        } else {
+                                            print("Document successfully written!")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        self.dismiss(animated: true)
+                    }
+                }
             case .Login:
                 print("Login Pressed")
             if tfFields[0].textField.text != nil && tfFields[1].textField.text != nil && tfFields[0].textField.text != "" && tfFields[1].textField.text != "" {
@@ -157,9 +220,23 @@ class SignUpFieldsViewController: UIViewController {
             }
             case .SignupApple:
                 print("Sign Up with Apple Completed")
+        case .ForgotPassword:
+            if let email = tfFields[0].textField.text {
+                if isValidEmail(email) {
+                    tfFields[0].animateSubtitleText(red: false, with: "")
+                    Auth.auth().sendPasswordReset(withEmail: email) { error in
+                        // ...
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    tfFields[0].animateSubtitleText(red: true, with: "Invalid Email")
+                }
+            }
         }
         
     }
+    
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

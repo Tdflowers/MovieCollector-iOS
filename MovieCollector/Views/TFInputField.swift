@@ -121,6 +121,14 @@ class TFInputField: UIView {
         
     }
     
+    func animateSubtitleText(red:Bool, with text:String) {
+                
+        UIView.transition(with: self.subtitleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {
+          self.subtitleLabel.textColor = .systemRed
+            self.subtitleLabel.text = text
+        })
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

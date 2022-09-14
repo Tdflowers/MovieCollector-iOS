@@ -18,6 +18,7 @@
 		846749FA25933F0700C15CDE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846749F925933F0700C15CDE /* Color+.swift */; };
 		847209F22599939600A32017 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847209F12599939600A32017 /* MovieDetailViewController.swift */; };
 		847209FA2599A0D500A32017 /* BrowseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847209F92599A0D500A32017 /* BrowseNavigationController.swift */; };
+		847D7D8728D1831E00A53563 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847D7D8628D1831E00A53563 /* UIViewController+.swift */; };
 		848AD1C02593014A0082FED5 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 848AD1BF2593014A0082FED5 /* Nuke */; };
 		848AD1C5259303D20082FED5 /* PosterIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848AD1C4259303D20082FED5 /* PosterIconView.swift */; };
 		848AD1CE25932BA00082FED5 /* PosterIconCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848AD1CD25932BA00082FED5 /* PosterIconCollectionView.swift */; };
@@ -81,6 +82,7 @@
 		846749F925933F0700C15CDE /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		847209F12599939600A32017 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
 		847209F92599A0D500A32017 /* BrowseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseNavigationController.swift; sourceTree = "<group>"; };
+		847D7D8628D1831E00A53563 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		848AD1C4259303D20082FED5 /* PosterIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconView.swift; sourceTree = "<group>"; };
 		848AD1CD25932BA00082FED5 /* PosterIconCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterIconCollectionView.swift; sourceTree = "<group>"; };
 		84993AE22592A0E600EFD094 /* MovieCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -267,6 +269,7 @@
 			children = (
 				84993B532592B34900EFD094 /* JSDecoder+.swift */,
 				846749F925933F0700C15CDE /* Color+.swift */,
+				847D7D8628D1831E00A53563 /* UIViewController+.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				84FF06B725A1546E00378690 /* SearchNavigationController.swift in Sources */,
 				8450052F2593D43700ABEFA7 /* NowPlayingMovies.swift in Sources */,
 				84DB1DB628C963160049DBBB /* LoginViewController.swift in Sources */,
+				847D7D8728D1831E00A53563 /* UIViewController+.swift in Sources */,
 				8422FCA8259F16CF00B3AE1F /* Cache.swift in Sources */,
 				84EF312F28CBA5FE0086356E /* SignUpFlowNavController.swift in Sources */,
 				84993B402592B09A00EFD094 /* Movie.swift in Sources */,

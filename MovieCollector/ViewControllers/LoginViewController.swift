@@ -110,6 +110,23 @@ class LoginViewController: UIViewController {
         button.tintColor = .label
         return button
     }()
+    var forgottenPasswordButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        var config = UIButton.Configuration.borderless()
+        config.title = "Forgot your password? Reset"
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            // 1
+            var outgoing = incoming
+            // 2
+            outgoing.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+            // 3
+            return outgoing
+          }
+        button.configuration = config
+        button.tintColor = .label
+        return button
+    }()
     
     func setupViews() {
         self.view.addSubview(titleLabel)
@@ -118,9 +135,11 @@ class LoginViewController: UIViewController {
         self.view.addSubview(signUpWithAppleButton)
         self.view.addSubview(signUpWithEmailButton)
         self.view.addSubview(switchAccountType)
+        self.view.addSubview(forgottenPasswordButton)
         self.signUpWithEmailButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
         self.signUpWithAppleButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
         self.switchAccountType.addTarget(self, action: #selector(switchAccountTypePressed), for: .touchUpInside)
+        self.forgottenPasswordButton.addTarget(self, action: #selector(forgotPassPressed), for: .touchUpInside)
         
         closeButton = UIButton(type: .custom, primaryAction: UIAction(handler: { (_) in
             self.dismiss(animated: true)
@@ -149,6 +168,8 @@ class LoginViewController: UIViewController {
         
         NSLayoutConstraint(item: switchAccountType, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: switchAccountType, attribute: .top, relatedBy: .equal, toItem: signUpWithAppleButton, attribute: .bottom, multiplier: 1, constant: 15).isActive = true
+        NSLayoutConstraint(item: forgottenPasswordButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: forgottenPasswordButton, attribute: .top, relatedBy: .equal, toItem: switchAccountType, attribute: .bottom, multiplier: 1, constant: 10).isActive = true
 
         NSLayoutConstraint.activate([
             closeButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 15),
@@ -215,6 +236,11 @@ class LoginViewController: UIViewController {
         self.signUpWithAppleButton.layer.add(animation, forKey: CATransitionType.fade.rawValue)
         self.switchAccountType.layer.add(animation, forKey: CATransitionType.fade.rawValue)
         self.signUpWithEmailButton.layer.add(animation, forKey: CATransitionType.fade.rawValue)
+    }
+    
+    @objc func forgotPassPressed() {
+        let signupvc = SignUpFieldsViewController(title: "Forgot Password", fields: [TFInputFieldType.Email], signupType: .ForgotPassword)
+        self.navigationController?.pushViewController(signupvc, animated: true)
     }
     
 

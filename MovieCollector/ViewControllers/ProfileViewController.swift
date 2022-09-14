@@ -186,6 +186,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
                 self.towatchMoviesData = array
             })
             self.signUpButton.removeFromSuperview()
+
         } else {
             self.userId = nil
             self.watchedMovieRef = nil
