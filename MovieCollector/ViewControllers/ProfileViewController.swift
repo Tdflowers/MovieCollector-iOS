@@ -52,15 +52,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         return button
     }()
     
-    var signOutButton:UIButton = {
-        let button = UIButton.init(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Sign Out", for: .normal)
-        button.setTitleColor(.systemGreen, for: .normal)
-        button.backgroundColor = .systemRed
-        return button
-    }()
-    
     var watchedMoviesCollectionView:PosterIconCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -95,14 +86,15 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = "Name"
         view.backgroundColor = .systemBackground
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(settingsTapped))
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: "gear")
         
         if Auth.auth().currentUser != nil {
             view.addSubview(watchedMoviesCollectionView)
             view.addSubview(towatchMoviesCollectionView)
-            view.addSubview(signOutButton)
             userId = Auth.auth().currentUser?.uid
             watchedMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
             towatchMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("towatch")
@@ -112,6 +104,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
                 self.towatchMoviesData = array
             })
+            
         } else {
             view.addSubview(signUpButton)
         }
@@ -122,7 +115,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         }
         
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
-        signOutButton.addTarget(self, action: #selector(signOutPressed), for: .touchUpInside)
         
     }
     
@@ -137,7 +129,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         } else {
             signUpPressed()
         }
-        
     }
     
     func layoutConstraints () {
@@ -153,7 +144,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             NSLayoutConstraint.activate([
                 watchedMoviesCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
                 watchedMoviesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1),
-                watchedMoviesCollectionView.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 20),
+                watchedMoviesCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
                 watchedMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
             NSLayoutConstraint.activate([
@@ -162,12 +153,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
                 towatchMoviesCollectionView.topAnchor.constraint(equalTo: watchedMoviesCollectionView.bottomAnchor, constant: 10),
                 towatchMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
-            NSLayoutConstraint.activate([
-                signOutButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/12),
-                signOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                signOutButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3)
-            ])
         }
     }
     
@@ -175,7 +160,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         if Auth.auth().currentUser != nil {
             self.view.addSubview(self.watchedMoviesCollectionView)
             self.view.addSubview(self.towatchMoviesCollectionView)
-            self.view.addSubview(self.signOutButton)
             self.userId = Auth.auth().currentUser?.uid
             self.towatchMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("towatch")
             self.watchedMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("watched")
@@ -186,6 +170,11 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
                 self.towatchMoviesData = array
             })
             self.signUpButton.removeFromSuperview()
+            getProfileData { profile in
+                DispatchQueue.main.async {
+                    self.title = profile.name
+                }
+            }
 
         } else {
             self.userId = nil
@@ -194,7 +183,6 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             self.view.addSubview(self.signUpButton)
             self.watchedMoviesCollectionView.removeFromSuperview()
             self.towatchMoviesCollectionView.removeFromSuperview()
-            self.signOutButton.removeFromSuperview()
             self.signUpButton.isHidden = false
         }
         
@@ -217,6 +205,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     
     @objc func signOutPressed () {
         try! Auth.auth().signOut()
+        self.title = "Login or Signup"
     }
     
     func updatedWatchedMoviesView() {
@@ -257,7 +246,19 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         }
     }
     
-    
+    func getProfileData(completion: @escaping (UserProfile) -> Void) {
+        let userref = Firestore.firestore().collection("users").document(self.userId!)
+        
+        let _ = userref.addSnapshotListener { doc, error in
+            if let doc = doc {
+                if doc.exists {
+                    if let data = doc.data() as? Dictionary<String, String> {
+                        completion(UserProfile.init(name: data["name"]!, username: data["username"]!, email: data["email"]!))
+                    }
+                }
+            }
+        }
+    }
     
     func posterWasTappedWithMovie(_ movie: Movie) {
         let newViewController = MovieDetailViewController()
@@ -268,6 +269,11 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     
     func posterWasTappedWithTVSeries(_ series: TVSeries) {
         print("tv series tapped")
+    }
+    
+    @objc func settingsTapped() {
+        print("Settings tapped")
+        signOutPressed()
     }
     
     deinit {
