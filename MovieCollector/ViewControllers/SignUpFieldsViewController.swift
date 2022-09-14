@@ -92,6 +92,7 @@ class SignUpFieldsViewController: UIViewController {
                 
         for field in fields {
             let tfField = TFInputField(type: field)
+            tfField.translatesAutoresizingMaskIntoConstraints = false
             tfFields.append(tfField)
             fieldsStackView.addArrangedSubview(tfField)
         }
@@ -157,8 +158,17 @@ class SignUpFieldsViewController: UIViewController {
         
         switch signuptype {
             case .SignUpPage1:
-            let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Email, TFInputFieldType.Password, TFInputFieldType.ConfirmPassword], signupType: .SignUpPage2)
-                self.navigationController?.pushViewController(signupvc, animated: true)
+            if tfFields[1].textField.text!.count > 2 {
+                checkIfUserNameExists(name:tfFields[1].textField.text!) { usernameInUse in
+                    if usernameInUse {
+                        self.tfFields[1].animateSubtitleText(red: true, with: "Username in Use. Please select another.")
+                    } else {
+                        self.tfFields[1].animateSubtitleText(red: false, with: "")
+                        let signupvc = SignUpFieldsViewController(title: "Sign Up", fields: [TFInputFieldType.Email, TFInputFieldType.Password, TFInputFieldType.ConfirmPassword], signupType: .SignUpPage2)
+                        self.navigationController?.pushViewController(signupvc, animated: true)
+                    }
+                }
+            }
             case .SignUpPage2:
             var fails = false
             if !isValidEmail(self.tfFields[0].textField.text ?? "") {
@@ -236,7 +246,25 @@ class SignUpFieldsViewController: UIViewController {
         
     }
     
-    
+    func checkIfUserNameExists(name:String, completion: @escaping (Bool) -> Void) {
+        let userref = Firestore.firestore().collection("users")
+        
+        userref.getDocuments { doc, error in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                for document in doc!.documents {
+                    if let data = document.data() as? Dictionary <String, String> {
+                        if data["username"] == name {
+                            completion(true)
+                            return
+                        }
+                    }
+                }
+                completion(false)
+            }
+        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -253,7 +253,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             if let doc = doc {
                 if doc.exists {
                     if let data = doc.data() as? Dictionary<String, String> {
-                        completion(UserProfile.init(name: data["name"]!, username: data["username"]!, email: data["email"]!))
+                        completion(UserProfile.init(name: data["name"]!, username: data["username"]!, email: data["email"] ?? ""))
                     }
                 }
             }
