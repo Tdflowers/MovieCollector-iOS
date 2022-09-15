@@ -42,14 +42,16 @@ class FeaturedMovieView: UIView {
             
         titleLabel = UILabel.init(frame: .zero)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.init(name: "AvenirNext-Bold", size: 18)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 3
         titleLabel.textAlignment = .center
         self.addSubview(titleLabel)
         
         overViewLabel = UILabel.init(frame: .zero)
         overViewLabel.translatesAutoresizingMaskIntoConstraints = false
-        overViewLabel.font = UIFont.init(name: "AvenirNext-Light", size: 12)
+        overViewLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        overViewLabel.adjustsFontForContentSizeCategory = true
         overViewLabel.numberOfLines = 8
         overViewLabel.textAlignment = .center
         self.addSubview(overViewLabel)
@@ -77,15 +79,14 @@ class FeaturedMovieView: UIView {
         
         NSLayoutConstraint.activate([
             titleLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/2),
-//            titleLabel.topAnchor.constraint(equalTo: posterImage.)
+            titleLabel.topAnchor.constraint(equalTo: self.topAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            overViewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
-            overViewLabel.widthAnchor.constraint(equalTo: titleLabel.widthAnchor, multiplier: 1)
-            
+            overViewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            overViewLabel.widthAnchor.constraint(equalTo: titleLabel.widthAnchor, multiplier: 1),
+            overViewLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: -10)
         ])
-        
         
         NSLayoutConstraint.activate([
             posterImage.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5),

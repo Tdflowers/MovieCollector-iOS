@@ -41,7 +41,8 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
 
         view.axis = .vertical
         view.spacing = 10
-        view.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        view.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        view.isLayoutMarginsRelativeArrangement = true
 
 
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -124,6 +125,7 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
     var featuredTitleLabel:UILabel = {
         let label = UILabel.init()
         label.text = "Featured"
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "AvenirNext-Bold", size: 20)
         return label
     }()
@@ -206,27 +208,15 @@ class BrowseViewController: UIViewController, PosterIconCollectionViewDelegate {
         ])
         
         NSLayoutConstraint.activate([
+            nowPlayingMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
+            upcomingMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
             popularMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
         ])
         
         NSLayoutConstraint.activate([
-            popularTitleLabel.heightAnchor.constraint(equalToConstant: 25)
-        ])
-        
-        NSLayoutConstraint.activate([
-            nowPlayingMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
-        ])
-        
-        NSLayoutConstraint.activate([
-            nowPlayingTitleLabel.heightAnchor.constraint(equalToConstant: 25)
-        ])
-        
-        NSLayoutConstraint.activate([
-            upcomingMoviesCollectionView.heightAnchor.constraint(greaterThanOrEqualTo: self.scrollView.heightAnchor, multiplier: 0.30),
-        ])
-        
-        NSLayoutConstraint.activate([
-            upcomingTitleLabel.heightAnchor.constraint(equalToConstant: 25)
+            upcomingTitleLabel.heightAnchor.constraint(equalToConstant: 25),
+            nowPlayingTitleLabel.heightAnchor.constraint(equalToConstant: 25),
+            popularTitleLabel.heightAnchor.constraint(equalToConstant: 25),
         ])
         
     }

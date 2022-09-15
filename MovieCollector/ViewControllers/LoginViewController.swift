@@ -29,8 +29,10 @@ class LoginViewController: UIViewController {
         let label = UILabel.init(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Sign Up for Movie Collector"
+        label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        label.font = UIFont.preferredFont(forTextStyle: .title2).bold()
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
     
@@ -40,7 +42,8 @@ class LoginViewController: UIViewController {
         label.text = "Create a profile to save your movies and tv shows"
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
     
@@ -58,11 +61,12 @@ class LoginViewController: UIViewController {
             // 1
             var outgoing = incoming
             // 2
-            outgoing.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+            outgoing.font = UIFont.preferredFont(forTextStyle: .title3)
             // 3
             return outgoing
           }
         button.configuration = config
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.tag = 0
         
         return button
@@ -82,12 +86,12 @@ class LoginViewController: UIViewController {
             // 1
             var outgoing = incoming
             // 2
-            outgoing.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+            outgoing.font = UIFont.preferredFont(forTextStyle: .title3)
             // 3
             return outgoing
           }
         button.configuration = config
-
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.tag = 1
         
         return button
@@ -102,12 +106,13 @@ class LoginViewController: UIViewController {
             // 1
             var outgoing = incoming
             // 2
-            outgoing.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+            outgoing.font = UIFont.preferredFont(forTextStyle: .footnote).bold()
             // 3
             return outgoing
           }
         button.configuration = config
         button.tintColor = .label
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
     }()
     var forgottenPasswordButton: UIButton = {
@@ -119,12 +124,13 @@ class LoginViewController: UIViewController {
             // 1
             var outgoing = incoming
             // 2
-            outgoing.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+            outgoing.font = UIFont.preferredFont(forTextStyle: .footnote)
             // 3
             return outgoing
           }
         button.configuration = config
         button.tintColor = .label
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
     }()
     

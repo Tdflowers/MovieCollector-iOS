@@ -45,9 +45,10 @@ class PosterIconView : UICollectionViewCell {
         titleLabel = UILabel.init()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
-        titleLabel.textColor = .myControlWhiteBlackBackground
-        titleLabel.numberOfLines = 2
-        titleLabel.font = UIFont.init(name: "AvenirNext-Regular", size: 12)
+        titleLabel.textColor = .label
+        titleLabel.numberOfLines = 3
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .caption1).bold()
+        titleLabel.adjustsFontForContentSizeCategory = true
         addSubview(titleLabel)
         
         setupLayout()

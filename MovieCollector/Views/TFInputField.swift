@@ -51,6 +51,8 @@ class TFInputField: UIView {
         titleLabel = UILabel(frame: .zero)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = title
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .title2)
         self.addSubview(titleLabel)
         
         textField = UITextField(frame: .zero)
@@ -69,6 +71,8 @@ class TFInputField: UIView {
         subtitleLabel.text = subtitle
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textAlignment = .center
+        subtitleLabel.adjustsFontForContentSizeCategory = true
+        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         self.addSubview(subtitleLabel)
     }
     

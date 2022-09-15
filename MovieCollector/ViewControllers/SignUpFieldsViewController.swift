@@ -201,7 +201,7 @@ class SignUpFieldsViewController: UIViewController {
                     } else {
                         if let authResult = authResult {
                                 if let viewController = navController.viewControllers[navController.viewControllers.count - 2] as? SignUpFieldsViewController {
-                                    self.ref.collection("users").document(authResult.user.uid).setData(["name":viewController.tfFields[0].textField.text ?? "", "username":viewController.tfFields[1].textField.text ?? ""]) { err in
+                                    self.ref.collection("users").document(authResult.user.uid).setData(["name":viewController.tfFields[0].textField.text ?? "", "username":viewController.tfFields[1].textField.text ?? "", "email":self.tfFields[0].textField.text ?? ""]) { err in
                                         if let err = err {
                                             print("Error writing document: \(err)")
                                         } else {

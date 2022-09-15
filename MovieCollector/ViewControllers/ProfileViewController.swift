@@ -80,21 +80,40 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         view.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return view
     }()
+    
+    var watchedListLabel: UILabel = {
+        let label = UILabel.init(frame: .zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Watched List"
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        return label
+    }()
 
+    var toWatchListLabel: UILabel = {
+        let label = UILabel.init(frame: .zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "To Watch List"
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        return label
+    }()
     
     var handle: AuthStateDidChangeListenerHandle?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Name"
+        self.title = "Profile"
         view.backgroundColor = .systemBackground
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(settingsTapped))
         navigationItem.rightBarButtonItem?.image = UIImage(systemName: "gear")
         
         if Auth.auth().currentUser != nil {
-            view.addSubview(watchedMoviesCollectionView)
+            view.addSubview(watchedMoviesCollectionView)    
             view.addSubview(towatchMoviesCollectionView)
+            view.addSubview(watchedListLabel)
+            view.addSubview(toWatchListLabel)
             userId = Auth.auth().currentUser?.uid
             watchedMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
             towatchMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("towatch")
@@ -142,15 +161,25 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             ])
         } else {
             NSLayoutConstraint.activate([
+                watchedListLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10),
+                watchedListLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.5),
+                watchedListLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 15),
+            ])
+            NSLayoutConstraint.activate([
+                toWatchListLabel.topAnchor.constraint(equalTo: watchedMoviesCollectionView.bottomAnchor, constant: 10),
+                toWatchListLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.5),
+                toWatchListLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 15),
+            ])
+            NSLayoutConstraint.activate([
                 watchedMoviesCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
                 watchedMoviesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1),
-                watchedMoviesCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                watchedMoviesCollectionView.topAnchor.constraint(equalTo: watchedListLabel.bottomAnchor, constant: 20),
                 watchedMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
             NSLayoutConstraint.activate([
                 towatchMoviesCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30),
                 towatchMoviesCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1),
-                towatchMoviesCollectionView.topAnchor.constraint(equalTo: watchedMoviesCollectionView.bottomAnchor, constant: 10),
+                towatchMoviesCollectionView.topAnchor.constraint(equalTo: toWatchListLabel.bottomAnchor, constant: 10),
                 towatchMoviesCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
         }
@@ -160,6 +189,8 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
         if Auth.auth().currentUser != nil {
             self.view.addSubview(self.watchedMoviesCollectionView)
             self.view.addSubview(self.towatchMoviesCollectionView)
+            view.addSubview(watchedListLabel)
+            view.addSubview(toWatchListLabel)
             self.userId = Auth.auth().currentUser?.uid
             self.towatchMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("towatch")
             self.watchedMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("watched")
@@ -172,7 +203,8 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             self.signUpButton.removeFromSuperview()
             getProfileData { profile in
                 DispatchQueue.main.async {
-                    self.title = profile.name
+//                    self.title = profile.name
+                    self.navigationController?.navigationBar.topItem?.title = profile.name
                 }
             }
 
@@ -183,6 +215,8 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             self.view.addSubview(self.signUpButton)
             self.watchedMoviesCollectionView.removeFromSuperview()
             self.towatchMoviesCollectionView.removeFromSuperview()
+            self.watchedListLabel.removeFromSuperview()
+            self.toWatchListLabel.removeFromSuperview()
             self.signUpButton.isHidden = false
         }
         
@@ -205,7 +239,7 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     
     @objc func signOutPressed () {
         try! Auth.auth().signOut()
-        self.title = "Login or Signup"
+        self.title = "Profile"
     }
     
     func updatedWatchedMoviesView() {

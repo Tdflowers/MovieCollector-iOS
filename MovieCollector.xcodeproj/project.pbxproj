@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F1052BC26ED512F00E8A74E /* ProfileNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1052BB26ED512F00E8A74E /* ProfileNavigationController.swift */; };
+		841DF34C28D3A69A00AFB6F2 /* UIFont_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841DF34B28D3A69A00AFB6F2 /* UIFont_.swift */; };
 		8422FCA0259EA7FA00B3AE1F /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = 8422FC9F259EA7FA00B3AE1F /* Cache */; };
 		8422FCA8259F16CF00B3AE1F /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8422FCA7259F16CF00B3AE1F /* Cache.swift */; };
 		844609C825943B2A00297198 /* FeaturedMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844609C725943B2A00297198 /* FeaturedMovieView.swift */; };
@@ -73,6 +74,7 @@
 
 /* Begin PBXFileReference section */
 		2F1052BB26ED512F00E8A74E /* ProfileNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileNavigationController.swift; sourceTree = "<group>"; };
+		841DF34B28D3A69A00AFB6F2 /* UIFont_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIFont_.swift; path = MovieCollector/Helpers/UIFont_.swift; sourceTree = SOURCE_ROOT; };
 		8422FCA7259F16CF00B3AE1F /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		844609C725943B2A00297198 /* FeaturedMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeaturedMovieView.swift; path = MovieCollector/Views/FeaturedMovieView.swift; sourceTree = SOURCE_ROOT; };
 		8450052E2593D43700ABEFA7 /* NowPlayingMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingMovies.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			children = (
 				84993AE92592A0E600EFD094 /* BrowseViewController.swift */,
 				84DB1DB528C963160049DBBB /* LoginViewController.swift */,
+				841DF34B28D3A69A00AFB6F2 /* UIFont_.swift */,
 				84EF313028CBCF620086356E /* SignUpFieldsViewController.swift */,
 				847209F12599939600A32017 /* MovieDetailViewController.swift */,
 				84E2E1B9259C4A4C00441A1E /* MoreDetailTextViewController.swift */,
@@ -452,6 +455,7 @@
 				84EF313328CBD01D0086356E /* TFInputField.swift in Sources */,
 				84993AE82592A0E600EFD094 /* SceneDelegate.swift in Sources */,
 				84AD3C8D2598576F00642DEC /* Crew.swift in Sources */,
+				841DF34C28D3A69A00AFB6F2 /* UIFont_.swift in Sources */,
 				845BB6D2259854B800BE84A9 /* Cast.swift in Sources */,
 				84EF313128CBCF620086356E /* SignUpFieldsViewController.swift in Sources */,
 				84993B382592AAF000EFD094 /* APIConnect.swift in Sources */,
