@@ -30,7 +30,7 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
     }()
     
     var searchOptionSegmentedControl:UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["Movies","TV Shows"])
+        let segmentedControl = UISegmentedControl(items: ["Movies","TV Shows", "Users"])
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.tintColor = .systemBlue
@@ -144,7 +144,7 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
             pendingRequestWorkItem = requestWorkItem
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500),
                                           execute: requestWorkItem)
-        } else {
+        } else if searchOptionSegmentedControl.selectedSegmentIndex == 1 {
             let requestWorkItem = DispatchWorkItem { [weak self] in
                 let apic = APIConnect.shared()
                 apic.getTVSearchResults(languge: "en-US", query: searchText, page: "1") { results in
@@ -159,6 +159,8 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
             pendingRequestWorkItem = requestWorkItem
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500),
                                           execute: requestWorkItem)
+        } else if searchOptionSegmentedControl.selectedSegmentIndex == 2 {
+            
         }
         
         // Save the new work item and execute it after 250 ms
@@ -190,6 +192,17 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
     
     func posterWasTappedWithTVSeries(_ series: TVSeries) {
         var totalRuntime:Int64 = 0
+        let alert = UIAlertController(title: nil, message: "Calculating Length...", preferredStyle: .alert)
+
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.style = UIActivityIndicatorView.Style.medium
+        loadingIndicator.startAnimating();
+        
+        
+        alert.view.addSubview(loadingIndicator)
+        present(alert, animated: true, completion: nil)
+        
         APIConnect.shared().getTVSeriesDetailsFor(show: series.id!, completion: { results in
             for seasonNumber in (1...Int64(results.numberOfSeasons!)) {
                 APIConnect.shared().getTVSeriesSeasonDetailsFor(show: series.id!, season: seasonNumber) { seriesResults in
@@ -200,48 +213,36 @@ class SearchViewController: UIViewController , UISearchBarDelegate, PosterIconCo
                     }
                 }
             }
-        })
-        
-        
-        let alert = UIAlertController(title: nil, message: "Calculating Length...", preferredStyle: .alert)
-
-        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.style = UIActivityIndicatorView.Style.medium
-        loadingIndicator.startAnimating();
-
-        alert.view.addSubview(loadingIndicator)
-        present(alert, animated: true, completion: nil)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.dismissAlert()
-
-            if totalRuntime == 0 {
-                
-                let alert = UIAlertController(title: series.name, message: "Sorry, this show doesn't have exact runtimes yet", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
-                    
-                }))
-                self.present(alert, animated: true, completion: nil)
-                
-                return
+            DispatchQueue.main.async() {
+                if let vc = self.presentedViewController, vc is UIAlertController {
+                    self.dismiss(animated: false) {
+                        if totalRuntime == 0 {
+                            
+                            let alert = UIAlertController(title: series.name, message: "Sorry, this show doesn't have exact runtimes yet", preferredStyle: UIAlertController.Style.alert)
+                            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
+                                
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            
+                            return
+                        }
+                        
+                        let days = String((totalRuntime / 1440)) + " days "
+                        let hours = String((totalRuntime % 1440) / 60) + " hours "
+                        let minutes = String(totalRuntime % 60) + " minutes"
+                        
+                        let alert = UIAlertController(title: series.name, message: "Would take " + days + hours + minutes + " to watch", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
+                            //Cancel Action
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
             }
-            
-            let days = String((totalRuntime / 1440)) + " days "
-            let hours = String((totalRuntime % 1440) / 60) + " hours "
-            let minutes = String(totalRuntime % 60) + " minutes"
-            
-            let alert = UIAlertController(title: series.name, message: "Would take " + days + hours + minutes + " to watch", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: { _ in
-                //Cancel Action
-            }))
-            self.present(alert, animated: true, completion: nil)
-        }
+        })
     }
     
     internal func dismissAlert() {
-        if let vc = self.presentedViewController, vc is UIAlertController {
-            dismiss(animated: false, completion: nil)
-        }
+        
     }
 }
