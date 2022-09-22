@@ -17,6 +17,8 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     var listListener:ListenerRegistration?
     var userId:String?
     
+    var isCurrentUser:Bool!
+    
     var watchedMoviesData:[Movie] = [] {
         didSet {
             //Did get now playing movies
@@ -100,21 +102,53 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     }()
     
     var handle: AuthStateDidChangeListenerHandle?
-
+    
+    init(isCurrentUser:Bool, userId:String?) {
+        self.isCurrentUser = isCurrentUser
+        self.userId = userId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Profile"
         view.backgroundColor = .systemBackground
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(settingsTapped))
-        navigationItem.rightBarButtonItem?.image = UIImage(systemName: "gear")
         
-        if Auth.auth().currentUser != nil {
-            view.addSubview(watchedMoviesCollectionView)    
+        if isCurrentUser {
+            if Auth.auth().currentUser != nil {
+                view.addSubview(watchedMoviesCollectionView)
+                view.addSubview(towatchMoviesCollectionView)
+                view.addSubview(watchedListLabel)
+                view.addSubview(toWatchListLabel)
+                userId = Auth.auth().currentUser?.uid
+                watchedMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
+                towatchMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("towatch")
+                updateMoviesData(ref: self.watchedMovieRef!, completion: { array in
+                    self.watchedMoviesData = array
+                })
+                updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
+                    self.towatchMoviesData = array
+                })
+                
+            } else {
+                view.addSubview(signUpButton)
+            }
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(settingsTapped))
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "gear")?.withTintColor(.label)
+            
+            handle = Auth.auth().addStateDidChangeListener { auth, user in
+                self.refreshProfile()
+            }
+        } else {
+            view.addSubview(watchedMoviesCollectionView)
             view.addSubview(towatchMoviesCollectionView)
             view.addSubview(watchedListLabel)
             view.addSubview(toWatchListLabel)
-            userId = Auth.auth().currentUser?.uid
             watchedMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("watched")
             towatchMovieRef = Firestore.firestore().collection("lists").document(userId!).collection("movielists").document("towatch")
             updateMoviesData(ref: self.watchedMovieRef!, completion: { array in
@@ -123,15 +157,8 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
             updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
                 self.towatchMoviesData = array
             })
-            
-        } else {
-            view.addSubview(signUpButton)
         }
         layoutConstraints()
-        
-        handle = Auth.auth().addStateDidChangeListener { auth, user in
-            self.refreshProfile()
-        }
         
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
         
@@ -186,41 +213,43 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     }
     
     func refreshProfile() {
-        if Auth.auth().currentUser != nil {
-            self.view.addSubview(self.watchedMoviesCollectionView)
-            self.view.addSubview(self.towatchMoviesCollectionView)
-            view.addSubview(watchedListLabel)
-            view.addSubview(toWatchListLabel)
-            self.userId = Auth.auth().currentUser?.uid
-            self.towatchMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("towatch")
-            self.watchedMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("watched")
-            updateMoviesData(ref: self.watchedMovieRef!, completion: { array in
-                self.watchedMoviesData = array
-            })
-            updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
-                self.towatchMoviesData = array
-            })
-            self.signUpButton.removeFromSuperview()
-            getProfileData { profile in
-                DispatchQueue.main.async {
-//                    self.title = profile.name
-                    self.navigationController?.navigationBar.topItem?.title = profile.name
+        if self.isCurrentUser {
+            if Auth.auth().currentUser != nil {
+                self.view.addSubview(self.watchedMoviesCollectionView)
+                self.view.addSubview(self.towatchMoviesCollectionView)
+                view.addSubview(watchedListLabel)
+                view.addSubview(toWatchListLabel)
+                self.userId = Auth.auth().currentUser?.uid
+                self.towatchMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("towatch")
+                self.watchedMovieRef = Firestore.firestore().collection("lists").document(self.userId!).collection("movielists").document("watched")
+                updateMoviesData(ref: self.watchedMovieRef!, completion: { array in
+                    self.watchedMoviesData = array
+                })
+                updateMoviesData(ref: self.towatchMovieRef!, completion: { array in
+                    self.towatchMoviesData = array
+                })
+                self.signUpButton.removeFromSuperview()
+                getProfileData { profile in
+                    DispatchQueue.main.async {
+                        //                    self.title = profile.name
+                        self.navigationController?.navigationBar.topItem?.title = profile.name
+                    }
                 }
+                
+            } else {
+                self.userId = nil
+                self.watchedMovieRef = nil
+                self.towatchMovieRef = nil
+                self.view.addSubview(self.signUpButton)
+                self.watchedMoviesCollectionView.removeFromSuperview()
+                self.towatchMoviesCollectionView.removeFromSuperview()
+                self.watchedListLabel.removeFromSuperview()
+                self.toWatchListLabel.removeFromSuperview()
+                self.signUpButton.isHidden = false
             }
-
-        } else {
-            self.userId = nil
-            self.watchedMovieRef = nil
-            self.towatchMovieRef = nil
-            self.view.addSubview(self.signUpButton)
-            self.watchedMoviesCollectionView.removeFromSuperview()
-            self.towatchMoviesCollectionView.removeFromSuperview()
-            self.watchedListLabel.removeFromSuperview()
-            self.toWatchListLabel.removeFromSuperview()
-            self.signUpButton.isHidden = false
+            
+            self.layoutConstraints()
         }
-        
-        self.layoutConstraints()
     }
     
     @objc func signUpPressed () {
@@ -307,7 +336,9 @@ class ProfileViewController: UIViewController, PosterIconCollectionViewDelegate 
     
     @objc func settingsTapped() {
         print("Settings tapped")
-        signOutPressed()
+        let settingsVC = SettingsViewController()
+        settingsVC.modalPresentationStyle = .overCurrentContext
+        self.present(settingsVC, animated: true)
     }
     
     deinit {

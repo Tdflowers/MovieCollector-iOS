@@ -12,7 +12,7 @@ class ProfileNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let pvc = ProfileViewController()
+        let pvc = ProfileViewController(isCurrentUser: true, userId: nil)
         self.setViewControllers([pvc], animated: false)
     }
     
